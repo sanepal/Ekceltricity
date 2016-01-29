@@ -3,8 +3,9 @@
 <head>
 	<script src="https://code.jquery.com/jquery.min.js"></script>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <link href="css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-	  <meta charset="utf-8">
+    <meta charset="utf-8">
   <title>Ekceltricity</title>
 </head>
 <body>
@@ -28,18 +29,102 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#">Settings</a></li>
-          <li><a href="#">Logout</li>
+          <li><a href="#">Logout</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
 	<div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-lg-offset-4">
+        <button type="button" class="btn btn-success btn-lg btn-block">Create a New Household</button>
+      </div>
+    </div>
+
+    <hr>
+
 		<div class="row">
 			<div class="col-md-8 col-md-offset-2">
-				
+				<div class="panel panel-default">
+          <div class="panel-heading">
+            Colleges roommates
+            <a href="#">
+              <span class="pull-right">Breakdown <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></span>
+            </A>
+          </div>
+          <div class="panel-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label for="" class="col-xs-5 control-label">Laptop charger</label>
+                <div class="col-xs-7">
+                  <input type="checkbox" class="form-control tracking" id="" checked>
+                  <span id="helpBlock" class="help-block">$5.43 this month.</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="" class="col-xs-5 control-label">Phone charger</label>
+                <div class="col-xs-7">
+                  <input type="checkbox" class="form-control tracking" id="" checked>
+                  <span id="helpBlock" class="help-block">$1.98 this month.</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="" class="col-xs-5 control-label">A/C</label>
+                <div class="col-xs-7">
+                  <input type="checkbox" class="form-control tracking" id="">
+                  <span id="helpBlock" class="help-block">$8.26 this month.</span>
+                </div>
+              </div>
+              <div class="other-appliances" style="display:none">
+                <div class="form-group">
+                  <label for="" class="col-xs-5 control-label">Lamp</label>
+                  <div class="col-xs-7">
+                    <input type="checkbox" class="form-control tracking" id="" checked>
+                    <span id="helpBlock" class="help-block">$0.26 this month.</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="" class="col-xs-5 control-label">Fan</label>
+                  <div class="col-xs-7">
+                    <input type="checkbox" class="form-control tracking" id="">
+                    <span id="helpBlock" class="help-block">$1.26 this month.</span>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="panel-footer">
+            <div class="center-block" style="text-align:center">
+              <a href="#" class="toggle-appliance" data-state="hidden">View more appliances <span class="glyphicon glyphicon-chevron-down"></span></a>
+            </div>
+          </div>
+        </div>
 			</div>
 		</div>
 	</div>
+  <script src="js/bootstrap-switch.js"></script>
+  <script>
+    $(document).ready(function() {
+      $(".tracking").bootstrapSwitch();
+      
+      $(".toggle-appliance").click(function(evt) {
+        evt.preventDefault();
+        var text = '';
+        var state = $(this).data("state");
+        if (state === "hidden") {
+          text = 'View less appliances <span class="glyphicon glyphicon-chevron-up"></span>';
+          $(this).data("state", "shown");
+        } else {
+          text = 'View more appliances <span class="glyphicon glyphicon-chevron-down"></span>';
+          $(this).data("state", "hidden");
+        }
+        $(this).html(text);
+        $(this).parents(".panel").find(".other-appliances").slideToggle();
+        console.log($(this).parents(".panel").find(".other-appliances"));
+      });
+    });
+
+  </script>
 </body>
 </html>
