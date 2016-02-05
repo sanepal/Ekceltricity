@@ -51,12 +51,12 @@
 				<div class="panel panel-default">
           <div class="panel-heading">
             Colleges roommates
-            <a href="#">
+            <a href="breakdown.html">
               <span class="pull-right">Breakdown <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></span>
-            </A>
+            </a>
           </div>
           <div class="panel-body">
-            <h4>Control your appliances</h4>
+            <h4><a href="my-overview.html">Control your appliances</a></h4>
             <form class="form-horizontal">
               <div class="form-group">
                 <label for="" class="col-xs-5 control-label">Laptop charger</label>
@@ -124,10 +124,8 @@
         }
         $(this).html(text);
         $(this).parents(".panel").find(".other-appliances").slideToggle();
-        console.log($(this).parents(".panel").find(".other-appliances"));
       });
     });
-
   </script>
 </body>
 </html>

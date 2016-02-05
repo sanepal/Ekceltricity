@@ -4,20 +4,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://code.jquery.com/jquery.min.js"></script>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
   <link href="css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="js/Chart.js"></script>
+  <link href="css/chartjs.css" rel="stylesheet" type="text/css" />  
   <title>Ekceltricity</title>
-  <style type="text/css">
-    .chart-legend li span{
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      margin-right: 5px;
-    }
-  </style>
 </head>
 <body>
 	<!-- Nav -->
@@ -34,7 +24,7 @@
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">My Households</a></li>
+          <li><a href="#">My Households</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
@@ -48,30 +38,75 @@
 
 	<div class="container">
 		<div class="row">
-			<div class="col-md-8 col-md-offset-2">
-				<div class="panel panel-default">
-          <div class="panel-heading">
-            Colleges roommates
-          </div>
-          <div class="panel-body">
-            <h4>Breakdown</h4>
-            <div id="js-legend" class="chart-legend"></div>
-            <div id="canvas-holder text-center">
-              <canvas id="chart-area" width="300" height="300"/>\
+      <div class="col-md-10 col-md-offset-1">
+        <h3>College Roommates <a href="#"><span class="glyphicon glyphicon-cog glyphicon"></span></a></h3>
+        <hr>
+        <div class="col-md-8 col-md-offset-2">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <form class="form-horizontal">
+                <div class="form-group">
+                  <label for="" class="col-xs-5 control-label">Breakdown for</label>
+                  <div class="col-xs-7">
+                    <select class="form-control">
+                      <option selected>Januray 2016</option>
+                      <option>February 2016</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+              <dl class="dl-horizontal">
+                <dt>Total</dt>
+                <dd>$25.95, 250 kW/h</dd>
+              </dl>
+              <p class="bg-primary" style="padding:15px">Yaswan's A/C has the highest usage so far with 80kW/h ($8.33)!!</p>
             </div>
-            <hr>
-            <h4>Total Daily Usage</h4>
-            <div id="js-legend" class="chart-legend"></div>
-           <div style="width: 50%">
-              <canvas id="bar-chart" height="450" width="600"></canvas>
-          </div>
+            <ul class="list-group">
+              <a href="my-overview.html" class="list-group-item" style="padding-left:1em">
+                Yaswan
+                <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+                <span class="pull-right">$12.05 this month&emsp;</span>
+              </a>
+              <a href="my-overview.html" class="list-group-item" style="padding-left:1em">
+                Dan
+                <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+                <span class="pull-right">$4.30 this month&emsp;</span>
+              </a>
+              <a href="my-overview.html" class="list-group-item" style="padding-left:1em">
+                Sabit
+                <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+                <span class="pull-right">$4.30 this month&emsp;</span>
+              </a>
+              <a href="my-overview.html" class="list-group-item" style="padding-left:1em">
+                Rahul
+                <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+                <span class="pull-right">$5.30 this month&emsp;</span>
+              </a>
+            </ul>
           </div>
         </div>
-			</div>
+        <hr>
+        
+        <div class="col-md-10 col-md-offset-1">
+          <h3>Breakdown</h3>
+          <canvas id="pie-chart" max-height="600"></canvas>
+        </div>
+        <div class="clearfix"></div>
+        <hr>
+        
+        <div class="col-md-10 col-md-offset-1">
+          <h3>Total Daily Usage</h3>
+          <canvas id="bar-chart" max-height="450"></canvas>
+        </div>
+      </div>
 		</div>
 	</div>
 
+  <script src="https://code.jquery.com/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
   <script src="js/bootstrap-switch.js"></script>
+  <script src="js/Chart.js"></script>
+  <script src="js/chart-config.js"></script>
   <script>
     var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
     $(document).ready(function() {
@@ -79,25 +114,25 @@
     });
     var pieData = [
         {
-          value: 300,
+          value: 12.05,
           color:"#F7464A",
           highlight: "#FF5A5E",
           label: "Yaswan"
         },
         {
-          value: 50,
+          value: 5.30,
           color: "#46BFBD",
           highlight: "#5AD3D1",
           label: "Sabit"
         },
         {
-          value: 100,
+          value: 4.30,
           color: "#FDB45C",
           highlight: "#FFC870",
           label: "Rahul"
         },
         {
-          value: 40,
+          value: 4.30,
           color: "#949FB1",
           highlight: "#A8B3C5",
           label: "Dan"
@@ -108,23 +143,22 @@
         labels : ["1/1","1/2","1/3","1/4","1/5","1/6","1/7"],
         datasets : [
           {
-            fillColor : "rgba(220,220,220,0.5)",
-            strokeColor : "rgba(220,220,220,0.8)",
-            highlightFill: "rgba(220,220,220,0.75)",
-            highlightStroke: "rgba(220,220,220,1)",
-            data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+            fillColor : "rgba(120,220,220,0.5)",
+            strokeColor : "rgba(120,220,220,0.8)",
+            highlightFill: "rgba(120,220,220,0.75)",
+            highlightStroke: "rgba(120,220,220,1)",
+            data : [0, 20, 30, 40, 45, 35, 42]
           }
         ]
       };
 
       window.onload = function(){
-        var ctx = document.getElementById("chart-area").getContext("2d");
+        var ctx = document.getElementById("pie-chart").getContext("2d");
         window.myPie = new Chart(ctx).Pie(pieData);
-        document.getElementById('js-legend').innerHTML = window.myPie.generateLegend();
+        $("#pie-chart").after(window.myPie.generateLegend());
         ctx = document.getElementById("bar-chart").getContext("2d");
-        window.myBar = new Chart(ctx).Bar(barChartData, {
-          responsive : true
-        });
+        window.myBar = new Chart(ctx).Bar(barChartData, null);
+        $("#bar-chart").after(window.myBar.generateLegend());
       }
       
   </script>
