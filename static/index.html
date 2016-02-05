@@ -25,12 +25,11 @@
       </div>
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">My Households</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li class="active"><a href="households.html">My Households</a></li>
+          <li><a href="about.html">About</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Settings</a></li>
+          <li><a href="setting.html">Settings</a></li>
           <li><a href="#">Logout</a></li>
         </ul>
       </div>
@@ -40,7 +39,7 @@
 	<div class="container">
     <div class="row">
       <div class="col-lg-4 col-lg-offset-4">
-        <button type="button" class="btn btn-success btn-lg btn-block">Create a New Household</button>
+        <button type="button" class="btn btn-success btn-lg btn-block" id="createHousehold">Create a New Household</button>
       </div>
     </div>
 
@@ -110,6 +109,10 @@
   <script>
     $(document).ready(function() {
       $(".tracking").bootstrapSwitch();
+
+      $("#createHousehold").click(function(evt) {
+        location.assign("household_creation.html");
+      });
       
       $(".toggle-appliance").click(function(evt) {
         evt.preventDefault();
