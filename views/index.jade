@@ -1,0 +1,42 @@
+extends ./skeleton.jade
+
+block append css
+  link(href="/css/bootstrap-switch.min.css", rel="stylesheet", type="text/css")
+
+block content
+  div.container
+    div.row
+      div.col-lg-4.col-lg-offset-4
+        a.btn.btn-primary.btn-lg.btn-block(role="button")
+          | Create a New Household
+    hr
+    div.row
+      div.col-md-8.col-md-offset-2
+        for household in households
+          div.panel.panel-default
+            div.panel-heading
+              | #{household.name}
+              a(href="/breakdown")
+                span.pull-right
+                  | Breakdown
+                  span.glyphicon.glyphicon-chevron-right(aria-hidden="true")
+            div.panel-body
+              h4
+                a(href="/my-breakdown")
+                  | Control your appliances
+              form.form-horizontal
+                for appliance in household.appliances
+                  div.form-group
+                    label.col-xs-5.control-label(for="") #{appliance.name}
+                    div.col-xs-7
+                      input.form-control.tracking(type="checkbox", checked)
+                      span.help-block 
+                        | $#{appliance.usage} this month
+
+block append scripts
+  script(src="/js/bootstrap-switch.min.js")
+  script.
+    $(document).ready(function() {
+      $(".tracking").bootstrapSwitch();
+    });
+
