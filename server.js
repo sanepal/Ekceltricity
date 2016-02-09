@@ -69,6 +69,29 @@ app.get('/', function(req, res) {
     ],    
   });
 });
+
+app.get('/breakdown', function(req, res) {
+  res.render('breakdown', {
+    householdMembers: [
+      {
+        'name': 'Yaswan',
+        'monthUsage': '12.05'
+      },
+      {
+        'name': 'Dan',
+        'monthUsage': '4.30'
+      },
+      {
+        'name': 'Sabit',
+        'monthUsage': '4.30'
+      },
+      {
+        'name': 'Rahul',
+        'monthUsage': '5.30'
+      }
+    ]
+  });
+});
 // Example route
 // app.get('/users', user.list);
 
