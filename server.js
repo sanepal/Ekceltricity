@@ -9,6 +9,7 @@ var path = require('path');
 
 // Example route
 // var user = require('./routes/user');
+var index = require('./routes/index');
 
 var app = express();
 
@@ -32,43 +33,7 @@ if ('development' == app.get('env')) {
 }
 
 // Add routes here
-app.get('/', function(req, res) {
-  res.render('index', {
-    title: 'Ekceltricity',
-    households: [
-      {
-        'name': 'College Household', 
-        'appliances': [
-          {
-            'name': 'Laptop Charger',
-            'usage': 5.43,
-            'status': 1
-          },
-          {
-            'name': 'Lamp',
-            'usage': 0.26,
-            'status': 1
-          },
-          {
-            'name': 'Phone Charger',
-            'usage': 1.98,
-            'status': 1
-          },
-          {
-            'name': 'A/C',
-            'usage': 8.26,
-            'status': 0
-          },
-          {
-            'name': 'Fan',
-            'usage': 1.26,
-            'status': 0
-          }
-        ]
-      }
-    ],    
-  });
-});
+app.get('/', index.view);
 // Example route
 // app.get('/users', user.list);
 
