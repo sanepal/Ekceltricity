@@ -1,0 +1,33 @@
+extends ./skeleton.jade
+
+block content
+	div.container
+		div.row
+			div.col-md-10.col-md-offset-1
+				h4
+					| College Roommates
+					a(href="household_options.html") 
+				 		span.glyphicon.glyphicon-cog.glyphicon
+				hr
+			div.col-md-8.col-md-offset-2
+				div.panel.panel-default
+					div.panel-body
+						form.form-horizontal
+							div.form-group
+								label.col-xs-5.control-label(for="") Breakdown for
+								div.col-xs-7
+									select.form-control
+										option(selected) January 2016
+										option February 2016
+						dl.dl-horizontal
+							dt Total
+							dd 25.95, 250 kW/h
+						p.bg-primary(style="padding:15px") Yaswan's A/C has the highest usage so far with 80kW/h ($8.33)!!
+					ul.list-group
+						for member in householdMembers
+						a.list-group-item(href="#{member.name}-overview.html" style="padding-left:1em") #{member.name}
+							span.glyphicon.glyphicon-chevron-right.pull-right(aria-hidden="true")
+							span.pull-right $#{member.monthUsage} this month&emsp;
+
+
+
