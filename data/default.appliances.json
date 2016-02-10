@@ -1,0 +1,32 @@
+[
+	{
+		"householdName":"College Household",
+		"appliances": [  
+			{  
+				"name":"Laptop Charger",
+				"cost":123,
+				"status":1
+			},
+			{  
+				"name":"Lamp",
+				"cost":100,
+				"status":1
+			},
+			{  
+				"name":"Phone Charger",
+				"cost":14,
+				"status":1
+			},
+			{  
+				"name":"A/C",
+				"cost":144,
+				"status":0
+			},
+			{  
+				"name":"Fan",
+				"cost":126,
+				"status":0
+			}
+		]
+	}
+]
