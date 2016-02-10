@@ -16,13 +16,13 @@ block content
           div.panel.panel-default
             div.panel-heading
               | #{household.name}
-              a(href="/breakdown")
+              a(href="/breakdown/")
                 span.pull-right
                   | Breakdown
                   span.glyphicon.glyphicon-chevron-right(aria-hidden="true")
             div.panel-body
               h4
-                a(href="/my-breakdown")
+                a(href="/my-overview")
                   | Control your appliances
               form.form-horizontal
                 for appliance in household.appliances
