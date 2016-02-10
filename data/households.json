@@ -1,6 +1,9 @@
 [  
   {  
+    "id":0,
+    "rate":16.35,
     "name":"College Household",
+    "members": [],
     "appliances":[  
       {  
         "name":"Laptop Charger",

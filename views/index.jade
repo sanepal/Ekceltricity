@@ -7,7 +7,7 @@ block content
   div.container
     div.row
       div.col-lg-4.col-lg-offset-4
-        a.btn.btn-primary.btn-lg.btn-block(role="button")
+        a.btn.btn-primary.btn-lg.btn-block(role="button", href="/create")
           | Create a New Household
     hr
     div.row
@@ -18,20 +18,23 @@ block content
               | #{household.name}
               a(href="/breakdown")
                 span.pull-right
-                  | Breakdown
+                  | Household Breakdown
                   span.glyphicon.glyphicon-chevron-right(aria-hidden="true")
             div.panel-body
-              h4
-                a(href="/my-breakdown")
-                  | Control your appliances
               form.form-horizontal
-                for appliance in household.appliances
-                  div.form-group
-                    label.col-xs-5.control-label(for="") #{appliance.name}
-                    div.col-xs-7
-                      input.form-control.tracking(type="checkbox", checked)
-                      span.help-block 
-                        | $#{appliance.usage} this month
+                unless household.appliances.length == 0
+                  h4
+                    a(href="/my-breakdown")
+                      | Control your appliances
+                  for appliance in household.appliances
+                    div.form-group
+                      label.col-xs-5.control-label(for="") #{appliance.name}
+                      div.col-xs-7
+                        input.form-control.tracking(type="checkbox", checked)
+                        span.help-block 
+                          | $#{appliance.usage} this month
+                else
+                  | sfsf
 
 block append scripts
   script(src="/js/bootstrap-switch.min.js")

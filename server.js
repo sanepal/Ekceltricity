@@ -10,6 +10,7 @@ var path = require('path');
 // Example route
 // var user = require('./routes/user');
 var index = require('./routes/index');
+var household = require('./routes/household');
 
 var app = express();
 
@@ -34,6 +35,8 @@ if ('development' == app.get('env')) {
 
 // Add routes here
 app.get('/', index.view);
+app.get('/create', household.view);
+app.post('/create', household.create);
 // Example route
 // app.get('/users', user.list);
 
