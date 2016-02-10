@@ -1,0 +1,58 @@
+extend ./skeleton.jade
+
+block content
+  div.container
+    div.row
+      div.col-md-8.col-md-offset-2
+        h3 Create a New Household
+        form.form-horizontal(method="POST", action="/create")
+          div.form-group
+            label.col-sm-4.control-label Household Name
+            div.col-sm-7
+              input.form-control(type="text", name="name", required)
+          div.form-group
+            label.col-sm-4.control-label Electricity Rate
+            div.col-sm-7
+              div.input-group
+                span.input-group-addon &cent;
+                input.form-control(type="text", name="rate", value="16.35", required)
+                span.input-group-addon per kWh
+              span.help-block 
+                | Rate of 16.35&cent;/kWh based on San Diego average. Enter your household's rate for more accurate tracking.
+          h4 Add Members
+          span.help-block
+            | Add extra household members using their email address.
+          div#members
+            div.col-sm-7.col-sm-offset-2
+              for i in [0, 1, 2]
+                div.form-group.input-group
+                  input.form-control(type="email", name="members[]")
+                  span.input-group-btn
+                    button.btn.btn-danger(onclick="removeMember(this)", tabindex="-1")
+                      span.glyphicon.glyphicon-remove
+              div.form-group
+                button#moreMembers.btn.btn-primary.btn-block Add more members
+          div.col-xs-4
+            a.btn.btn-default.pull-right(href="/", role="button") Cancel
+          div.col-xs-7
+            button.btn.btn-success Create Household
+
+block append scripts
+  script.
+    $(document).ready(function() {
+      $("#moreMembers").on('click', function(evt) {
+        evt.preventDefault();
+        $("#members .input-group:last").after(
+          "<div class='form-group input-group'>"
+          + "<input type='email' name='members[]' class='form-control'>"
+          + "<span class='input-group-btn'><button class='btn btn-danger' onclick='removeMember(this)' tabindex='-1'>"
+          + "<span class='glyphicon glyphicon-remove'></span></button></span></div>"
+        );
+      });
+    })
+
+    function removeMember(elmt) {
+      $(elmt).parents(".input-group").remove();
+    }
+            
+

@@ -10,6 +10,7 @@ var path = require('path');
 // Example route
 // var user = require('./routes/user');
 var index = require('./routes/index');
+var household = require('./routes/household');
 var breakdown = require('./routes/breakdown')
 var myOverview = require('./routes/my-overview')
 
@@ -37,8 +38,9 @@ if ('development' == app.get('env')) {
 // Add routes here
 app.get('/', index.view);
 app.get('/breakdown', breakdown.view);
+app.get('/create', household.view);
+app.post('/create', household.create);
 app.get('/my-overview', myOverview.view);
-
 // Example route
 // app.get('/users', user.list);
 
