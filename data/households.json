@@ -1,0 +1,32 @@
+[  
+  {  
+    "name":"College Household",
+    "appliances":[  
+      {  
+        "name":"Laptop Charger",
+        "usage":5.43,
+        "status":1
+      },
+      {  
+        "name":"Lamp",
+        "usage":0.26,
+        "status":1
+      },
+      {  
+        "name":"Phone Charger",
+        "usage":1.98,
+        "status":1
+      },
+      {  
+        "name":"A/C",
+        "usage":8.26,
+        "status":0
+      },
+      {  
+        "name":"Fan",
+        "usage":1.26,
+        "status":0
+      }
+    ]
+  }
+]

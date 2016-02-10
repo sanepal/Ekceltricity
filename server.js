@@ -9,6 +9,9 @@ var path = require('path');
 
 // Example route
 // var user = require('./routes/user');
+var index = require('./routes/index');
+var breakdown = require('./routes/breakdown')
+var myOverview = require('./routes/my-overview')
 
 var app = express();
 
@@ -32,66 +35,10 @@ if ('development' == app.get('env')) {
 }
 
 // Add routes here
-app.get('/', function(req, res) {
-  res.render('index', {
-    title: 'Ekceltricity',
-    households: [
-      {
-        'name': 'College Household', 
-        'appliances': [
-          {
-            'name': 'Laptop Charger',
-            'usage': 5.43,
-            'status': 1
-          },
-          {
-            'name': 'Lamp',
-            'usage': 0.26,
-            'status': 1
-          },
-          {
-            'name': 'Phone Charger',
-            'usage': 1.98,
-            'status': 1
-          },
-          {
-            'name': 'A/C',
-            'usage': 8.26,
-            'status': 0
-          },
-          {
-            'name': 'Fan',
-            'usage': 1.26,
-            'status': 0
-          }
-        ]
-      }
-    ],    
-  });
-});
+app.get('/', index.view);
+app.get('/breakdown', breakdown.view);
+app.get('/my-overview', myOverview.view);
 
-app.get('/breakdown', function(req, res) {
-  res.render('breakdown', {
-    householdMembers: [
-      {
-        'name': 'Yaswan',
-        'monthUsage': '12.05'
-      },
-      {
-        'name': 'Dan',
-        'monthUsage': '4.30'
-      },
-      {
-        'name': 'Sabit',
-        'monthUsage': '4.30'
-      },
-      {
-        'name': 'Rahul',
-        'monthUsage': '5.30'
-      }
-    ]
-  });
-});
 // Example route
 // app.get('/users', user.list);
 
