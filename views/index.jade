@@ -24,7 +24,7 @@ block content
               form.form-horizontal
                 unless household.appliances.length == 0
                   h4
-                    a(href="/my-overview")
+                    a(href="/breakdown/#{household.id}/2")
                       | Control your appliances
                   for appliance in household.appliances
                     div.form-group
@@ -32,7 +32,7 @@ block content
                       div.col-xs-7
                         input.form-control.tracking(type="checkbox", checked)
                         span.help-block 
-                          | $#{appliance.usage} this month
+                          | $5.14 this month
                 else
                   | sfsf
 

@@ -1,12 +1,12 @@
 var households = require('./data/households.json');
 var users = require('./data/users.json');
+var appliances = require('./data/appliances.json');
 
 exports.getHouseholds = function() {
   return households;
 }
 
 exports.getHousehold = function(id) {
-  console.log(households);
   return households[id];
 }
 
@@ -17,13 +17,13 @@ exports.createHousehold = function(data) {
 }
 
 exports.createOrGetUser = function(email) {
-  if (users.email === undefined) {
-    users.email = {
+  if (users[email] === undefined) {
+    users[email] = {
       'name': Math.random().toString(36).substring(7), 
       'id': Object.keys(users).length
     };
   }
-  return users.email;
+  return users[email];
 }
 
 exports.getUser = function(id) {
@@ -32,4 +32,18 @@ exports.getUser = function(id) {
       return users[user];
     }
   }
+}
+
+exports.createAppliance = function(data) {
+  data.id = appliances.length;
+  appliances.push(data);
+  return data.id;
+}
+
+exports.addAppliance = function(householdId, userId, applianceId) {
+  households[householdId].members[userId].push(applianceId);
+}
+
+exports.getAppliance = function(applianceId) {
+  return appliances[applianceId];
 }

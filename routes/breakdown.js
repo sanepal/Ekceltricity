@@ -6,10 +6,10 @@ exports.view = function(req, res) {
 
 	var members = [];
 	household.members.forEach(function(e) {
-		var member = db.getUser(e);
+		var member = db.getUser(e.id);
 		member['monthUsage'] = 10.56;
 		members.push(member);
 	});
 
-	res.render('breakdown', {'household': household, 'members': members});
+	res.render('breakdown', {'title': household.name, 'household': household, 'members': members});
 }

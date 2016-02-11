@@ -14,13 +14,12 @@ exports.create = function(req, res) {
       return;
     }
     var member = db.createOrGetUser(email);
-    members.push(member.id);
+    members.push({'id': member.id, 'appliances': []});
   });
 
   // Add current user to household
-  members.push(req.userId);
+  members.push({'id': req.userId, 'appliances': []});
   household.members = members;
-  household.appliances = [];
   db.createHousehold(household);
 
   // TODO: Redirect to my appliances page for this household 

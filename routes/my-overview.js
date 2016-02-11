@@ -1,18 +1,28 @@
-var appliances = require('../data/default.appliances.json');
+var db = require('../db');
 
 exports.view = function(req, res) {
-	// Use to retrieve data
+	var memberId = req.params.member;
 	var householdId = req.params.household;
-	var userId = req.params.userId;
 
-	var data = appliances;
-	for (var i = 0; i < appliances.length; i++) {
-		if (appliances[i].householdName == 'College Household') {
-			data = appliances[i];
-		}
-	}
-	if (data == appliances) {
-		console.log('Unable to find correct household for appliances');
-	}
-	res.render('my-overview', data);
+	var household = db.getHousehold(householdId);
+	var member = undefined;
+
+  var appliances = [];
+  
+  household.members.forEach(function(m) {
+    if (m.id == memberId) {
+    	member = db.getUser(m.id);
+
+    	if (m.appliances !== undefined) {
+	      m.appliances.forEach(function(a) {
+	        appliances.push(db.getAppliance(a));
+	      });
+	    }
+    }
+  });
+
+  var title = household.name + " > " + (memberId == req.userId ? 'My Usage' : member.name + "'s Usage");
+
+  res.locals.userId = req.userId;
+	res.render('my-overview', {'title': title, 'household': household, 'member': member, 'appliances': appliances});
 }
