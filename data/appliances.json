@@ -4,7 +4,7 @@
     "owner": 0,
     "name": "Phone Charger",
     "rate": 0.084,
-    "status": 1,
+    "status": 0,
     "usage":[
       {
         "start": 1454292000000,
@@ -41,7 +41,7 @@
     "owner": 0,
     "name": "Laptop",
     "rate": 0.02,
-    "status": 1,
+    "status": 0,
     "usage":[
       {
         "start": 1454292000000,
@@ -78,7 +78,7 @@
     "owner": 1,
     "name": "PC",
     "rate": 0.06,
-    "status": 1,
+    "status": 0,
     "usage":[
       {
         "start": 1454292000000,
@@ -115,7 +115,7 @@
     "owner": 2,
     "name": "Laptop",
     "rate": 0.02,
-    "status": 1,
+    "status": 0,
     "usage":[
       {
         "start": 1454292000000,
@@ -152,7 +152,7 @@
     "owner": 3,
     "name": "TV",
     "rate": 0.012,
-    "status": 1,
+    "status": 0,
     "usage":[
       {
         "start": 1454292000000,

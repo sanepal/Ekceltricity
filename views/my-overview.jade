@@ -41,10 +41,7 @@ block content
 												label.col-xs-5.control-label(for='')
 													| #{appliance.name}
 												div.col-xs-7
-													if appliance.status == 1
-														input.form-control.tracking(type='checkbox' id='' checked)
-													else
-														input.form-control.tracking(type='checkbox' id='')
+													input.form-control.tracking(type='checkbox' data-appliance='#{appliance.id}' checked=(appliance.status == 1))
 													span.help-block(id='helpBlock')
 														| $10.10 this month
 								div.panel-footer
@@ -79,7 +76,7 @@ block content
 												tr
 													td #{appliance.name}
 													td #{moment(usage.start).format('MM/DD/YYYY, hh:mm a')}
-													td #{moment(usage.end).format('MM/DD/YYYY, hh:mm a')}
+													td #{usage.end === undefined ? '' : moment(usage.end).format('MM/DD/YYYY, hh:mm a')}
 													td 
 
 
@@ -120,21 +117,25 @@ block append scripts
 		]};
 		$(document).ready(function() {
 		  $(".tracking").bootstrapSwitch();
+		  $(".tracking").on('switchChange.bootstrapSwitch', function(evt, state) {
+		  	$.get('/tracking/' + $(this).data('appliance'));
+		  });
+
 		  $(".table").tablesorter({ sortList: [[0, 0], [1, 0]] });
 		  
 		  $(".toggle-appliance").click(function(evt) {
-			evt.preventDefault();
-			var text = '';
-			var state = $(this).data("state");
-			if (state === "hidden") {
-			  text = 'Hide appliances <span class="glyphicon glyphicon-chevron-up"></span>';
-			  $(this).data("state", "shown");
-			} else {
-			  text = 'Show appliances <span class="glyphicon glyphicon-chevron-down"></span>';
-			  $(this).data("state", "hidden");
-			}
-			$(this).html(text);
-			$(this).parents(".panel").find(".panel-body").slideToggle();
+				evt.preventDefault();
+				var text = '';
+				var state = $(this).data("state");
+				if (state === "hidden") {
+				  text = 'Hide appliances <span class="glyphicon glyphicon-chevron-up"></span>';
+				  $(this).data("state", "shown");
+				} else {
+				  text = 'Show appliances <span class="glyphicon glyphicon-chevron-down"></span>';
+				  $(this).data("state", "hidden");
+				}
+				$(this).html(text);
+				$(this).parents(".panel").find(".panel-body").slideToggle();
 		  });
 
 		  // Get context with jQuery - using jQuery's .get() method.

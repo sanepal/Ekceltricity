@@ -13,6 +13,7 @@ var index = require('./routes/index');
 var household = require('./routes/household');
 var breakdown = require('./routes/breakdown')
 var myOverview = require('./routes/my-overview');
+var tracking = require('./routes/tracking');
 
 var app = express();
 
@@ -50,6 +51,7 @@ app.get('/breakdown/:household', breakdown.view);
 app.get('/create', household.view);
 app.post('/create', household.create);
 app.get('/breakdown/:household/:member', myOverview.view);
+app.get('/tracking/:appliance', tracking.toggle);
 // Example route
 // app.get('/users', user.list);
 

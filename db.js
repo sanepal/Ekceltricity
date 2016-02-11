@@ -47,3 +47,13 @@ exports.addAppliance = function(householdId, userId, applianceId) {
 exports.getAppliance = function(applianceId) {
   return appliances[applianceId];
 }
+
+exports.toggle = function(applianceId) {
+  if (appliances[applianceId].status === 1) {
+    appliances[applianceId].usage[appliances[applianceId].usage.length - 1].end = Date.now();
+    appliances[applianceId].status = 0;
+  } else {
+    appliances[applianceId].usage.push({'start': Date.now()});
+    appliances[applianceId].status = 1;
+  }
+}

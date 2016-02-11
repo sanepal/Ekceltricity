@@ -30,7 +30,7 @@ block content
                     div.form-group
                       label.col-xs-5.control-label(for="") #{appliance.name}
                       div.col-xs-7
-                        input.form-control.tracking(type="checkbox", checked)
+                        input.form-control.tracking(type="checkbox", data-appliance="#{appliance.id}", checked=(appliance.status == 1))
                         span.help-block 
                           | $5.14 this month
                 else
@@ -41,5 +41,8 @@ block append scripts
   script.
     $(document).ready(function() {
       $(".tracking").bootstrapSwitch();
+      $(".tracking").on('switchChange.bootstrapSwitch', function(evt, state) {
+        $.get('/tracking/' + $(this).data('appliance'));
+      });
     });
 
