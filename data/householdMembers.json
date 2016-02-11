@@ -1,0 +1,23 @@
+[
+  {
+    "householdName":"College Household",
+    "members": [
+      {
+        "name": "Yaswan",
+        "monthUsage": "12.05"
+      },
+      {
+        "name": "Dan",
+        "monthUsage": "4.30"
+      },
+      {
+        "name": "Sabit",
+        "monthUsage": "4.30"
+      },
+      {
+        "name": "Rahul",
+        "monthUsage": "5.30"
+      }
+    ]
+  }
+]

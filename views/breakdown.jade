@@ -1,0 +1,102 @@
+extends ./skeleton.jade
+
+block append css
+	link(href="css/bootstrap-switch.min.css", rel="stylesheet", type="text/css")
+	link(href="css/chartjs.css", rel="stylesheet", type="text/css")
+
+block content
+	div.container
+		div.row
+			div.col-md-10.col-md-offset-1
+				h3
+					| College Roommates
+					a(href='household_options.html') 
+						span.glyphicon.glyphicon-cog.glyphicon
+				hr
+				div.col-md-8.col-md-offset-2
+					div.panel.panel-default
+						div.panel-body
+							form.form-horizontal
+								div.form-group
+									label.col-xs-5.control-label(for="") Breakdown for
+									div.col-xs-7
+										select.form-control
+											option(selected) January 2016
+											option February 2016
+							dl.dl-horizontal
+								dt Total
+								dd $25.95, 250 kW/h
+							p.bg-primary(style='padding:15px') Yaswan's A/C has the highest usage so far with 80kW/h ($8.33)!!
+						ul.list-group
+							for member in members
+								a.list-group-item(href='#{member.name}-overview.html' style='padding-left:1em') #{member.name} 
+									span.glyphicon.glyphicon-chevron-right.pull-right(aria-hidden='true') 
+									span.pull-right $#{member.monthUsage} this month&emsp;
+				hr
+				div.col-md-10.col-md-offset-1
+					h3
+						| Breakdown
+					canvas(id='pie-chart' max-height='600')
+				div.clearfix
+				hr
+				div.col-md-10.col-md-offset-1
+					h3
+						| Total Daily Usage
+					canvas(id='bar-chart' max-height='450')
+
+block append scripts
+	script(src='js/Chart.js')
+	script(src='js/chart-config.js')
+	script(src='/js/bootstrap-switch.min.js')
+	script.
+		var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+		$(document).ready(function() {
+			$(".tracking").bootstrapSwitch();
+		});
+		var pieData = [
+		{
+			value: 12.05,
+			color:"#F7464A",
+			highlight: "#FF5A5E",
+			label: "Yaswan"
+		},
+		{
+			value: 4.30,
+			color: "#46BFBD",
+			highlight: "#5AD3D1",
+			label: "Sabit"
+		},
+		{
+			value: 5.30,
+			 color: "#FDB45C",
+			highlight: "#FFC870",
+		 	label: "Rahul"
+		},
+		{
+			value: 4.30,
+			color: "#949FB1",
+			highlight: "#A8B3C5",
+			label: "Dan"
+		}];
+
+		var barChartData = {
+			labels : ["1/1","1/2","1/3","1/4","1/5","1/6","1/7"],
+			datasets : [
+				{
+					fillColor : "rgba(120,220,220,0.5)",
+					strokeColor : "rgba(120,220,220,0.8)",
+					highlightFill: "rgba(120,220,220,0.75)",
+					highlightStroke: "rgba(120,220,220,1)",
+					data : [0, 20, 30, 40, 45, 35, 42]
+				}
+			]
+		};
+		window.onload = function() {
+			var ctx = document.getElementById("pie-chart").getContext("2d");
+			window.myPie = new Chart(ctx).Pie(pieData);
+			$("#pie-chart").after(window.myPie.generateLegend());
+			ctx = document.getElementById("bar-chart").getContext("2d");
+			window.myBar = new Chart(ctx).Bar(barChartData, null);
+		}
+
+
