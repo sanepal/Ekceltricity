@@ -1,0 +1,18 @@
+{
+  "sn@uc":{
+    "id": 0,
+    "name": "Sabit"
+  },
+  "rs@uc":{
+    "id": 1,
+    "name": "Rahul"
+  },
+  "dt@uc":{
+    "id": 2,
+    "name": "Dan"
+  },
+  "yy@uc":{    
+    "id": 3,
+    "name": "Yaswan"
+  }
+}

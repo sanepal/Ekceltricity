@@ -1,8 +1,8 @@
 extends ./skeleton.jade
 
 block append css
-	link(href="css/bootstrap-switch.min.css", rel="stylesheet", type="text/css")
-	link(href="css/chartjs.css", rel="stylesheet", type="text/css")
+	link(href="/css/bootstrap-switch.min.css", rel="stylesheet", type="text/css")
+	link(href="/css/chartjs.css", rel="stylesheet", type="text/css")
 
 block content
 	div.container
@@ -12,7 +12,7 @@ block content
 					a(href='/breakdown')
 						| College Household
 				h4(style='display:inline')
-					| &nbsp\ Sabit's Appliances
+					| &nbsp; Sabit's Appliances
 				hr
 				div.col-md-8.col-md-offset-2
 					div.panel.panel-default
@@ -59,8 +59,8 @@ block content
 					canvas(id='dailyChart' max-height='600')
 
 block append scripts
-	script(src='js/Chart.js')
-	script(src='js/chart-config.js')
+	script(src='/js/Chart.js')
+	script(src='/js/chart-config.js')
 	script(src='/js/bootstrap-switch.min.js')
 	script.
 		var pieData = [

@@ -12,7 +12,7 @@ var path = require('path');
 var index = require('./routes/index');
 var household = require('./routes/household');
 var breakdown = require('./routes/breakdown')
-var myOverview = require('./routes/my-overview')
+var myOverview = require('./routes/my-overview');
 
 var app = express();
 
@@ -35,12 +35,18 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+var loadUser = function(req, res, next) {
+  req.userId = 2;
+  next();
+}
+
 // Add routes here
+app.all('*', loadUser);
 app.get('/', index.view);
-app.get('/breakdown', breakdown.view);
+app.get('/breakdown/:household', breakdown.view);
 app.get('/create', household.view);
 app.post('/create', household.create);
-app.get('/my-overview', myOverview.view);
+app.get('/breakdown/:household/:member', myOverview.view);
 // Example route
 // app.get('/users', user.list);
 
