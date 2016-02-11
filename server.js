@@ -11,8 +11,10 @@ var path = require('path');
 // var user = require('./routes/user');
 var index = require('./routes/index');
 var household = require('./routes/household');
-var breakdown = require('./routes/breakdown')
-var myOverview = require('./routes/my-overview')
+var breakdown = require('./routes/breakdown');
+var myOverview = require('./routes/my-overview');
+var editAppliances = require('./routes/edit-appliances');
+var addAppliances = require('./routes/add-appliances');
 
 var app = express();
 
@@ -41,6 +43,8 @@ app.get('/breakdown', breakdown.view);
 app.get('/create', household.view);
 app.post('/create', household.create);
 app.get('/my-overview', myOverview.view);
+app.get('/add-appliances', addAppliances.view);
+app.get('/edit-appliances', editAppliances.view);
 // Example route
 // app.get('/users', user.list);
 
