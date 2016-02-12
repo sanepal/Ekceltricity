@@ -41,6 +41,7 @@ if ('development' == app.get('env')) {
 
 var loadUser = function(req, res, next) {
   req.userId = 2;
+  res.locals.userId = req.userId;
   next();
 }
 
