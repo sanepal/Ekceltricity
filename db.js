@@ -41,7 +41,26 @@ exports.createAppliance = function(data) {
 }
 
 exports.addAppliance = function(householdId, userId, applianceId) {
-  households[householdId].members[userId].push(applianceId);
+  var householdIdx = -1;
+  console.log("households length: " + households.length);
+  for (var i = 0; i < households.length; i++) {
+    console.log("i: " + i + ", householdId: " + householdId);
+    if (households[i].id == householdId) {
+      householdIdx = i;
+      break;
+    }
+  }
+  console.log("householdIdx: " + householdIdx);
+  console.log("userId: " + userId + ", household members length: " + households[householdIdx].members.length);
+  var userIdx = -1;
+  for (var i = 0; i < households[householdIdx].members.length; i++) {
+    if (households[householdIdx].members[i].id == userId) {
+        userIdx = i;
+        break;
+    }
+  }
+  console.log("userIdx: " + userIdx);
+  households[householdIdx].members[userIdx].appliances.push(applianceId);
 }
 
 exports.getAppliance = function(applianceId) {

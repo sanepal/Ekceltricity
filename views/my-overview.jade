@@ -26,20 +26,36 @@ block content
 								div.panel-heading
 									| Control your Appliances
 								div.panel-body
-									div.btn-group.btn-group-justified(role='group' aria-label='...')
-										div.btn-group(role='group')
-											a.btn.btn-success#addAppliance(href='#' role='button')
-												| Add Appliance
-										div.btn-group#editAppliances(role='group')
-											a.btn.btn-primary(href='#' button type='button')
-												| Edit
+									button.btn.btn-success.btn-block#addAppliance(href='#' role='button' style="display:#{appliances.length === 0 ? 'none' : 'block'}")
+										| Add Appliance
+									div#addApplianceDiv(hidden=(appliances.length !== 0))
+										hr
+										form.form-horizontal(method="POST" action='/my-overview/#{household.id}/')
+											div.form-group
+												label.col-sm-4.control-label Appliance Name
+												div.col-sm-7
+													input.form-control#addApplianceNameInput(type="text", name="name", required)
+											div.form-group
+												label.col-sm-4.control-label Usage Rate
+												div.col-sm-7
+													div.input-group
+														input.form-control#addApplianceUsageRateInput(type="text", name="rate", value="0.1", required)
+														span.input-group-addon kWh
+											div.col-sm-5.col-sm-offset-1
+												a.btn.btn-default.pull-right#cancelAddAppliance(button type='button')
+													| Cancel
+											div.col-sm-5
+												button.btn.btn-success
+													| Add
 									div.clearfix
 									hr
 									form.form-horizontal
 										for appliance in appliances
 											div.form-group
 												label.col-xs-5.control-label(for='')
-													| #{appliance.name}
+													a(href='#' id='edit#{appliance.id}')
+														| #{appliance.name}&nbsp;
+														span.glyphicon.glyphicon-pencil
 												div.col-xs-7
 													input.form-control.tracking(type='checkbox' data-appliance='#{appliance.id}' checked=(appliance.status == 1))
 													span.help-block(id='helpBlock')
@@ -140,20 +156,23 @@ block append scripts
 
 		  $("#addAppliance").on('click', function(evt) {
 		  	evt.preventDefault();
-		  	$(".form-group:first").before(
-		  		"<div class='form-group'>" +
+		  	$("#addApplianceDiv").toggle();
+		  	/*"<div class='form-group'>" +
 		  			"<label class='col-xs-5 control-label' for=''>Appliance Name</label>" + 
 		  			"<div class='col-xs-7'>" + 
 		  				"<input type='checkbox' data-appliance='3' class='form-control tracking'>" +
 		  				"<span class='help-block' id='help-block'>$0 this month</span>" +
 		  			"</div>" +
-		  		"</div>"
-		  	)
+		  		"</div>"*/
 		  	$(".tracking").bootstrapSwitch();
 		  });
-
 		  $("#editAppliances").on('click', function(evt) {
 		  	evt.preventDefault();
+		  });
+		  $("#cancelAddAppliance").on('click', function(evt) {
+		  	evt.preventDefault();
+		  	$("#addApplianceNameInput").val("");
+		  	$("#addApplianceDiv").toggle();
 		  });
 
 		  // Get context with jQuery - using jQuery's .get() method.

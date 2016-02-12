@@ -52,6 +52,7 @@ app.get('/create', household.view);
 app.post('/create', household.create);
 app.get('/breakdown/:household/:member', myOverview.view);
 app.get('/tracking/:appliance', tracking.toggle);
+app.post('/my-overview/:household', myOverview.addAppliance);
 // Example route
 // app.get('/users', user.list);
 
