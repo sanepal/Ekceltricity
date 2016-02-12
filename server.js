@@ -11,7 +11,7 @@ var path = require('path');
 // var user = require('./routes/user');
 var index = require('./routes/index');
 var household = require('./routes/household');
-var breakdown = require('./routes/breakdown')
+var breakdown = require('./routes/breakdown');
 var myOverview = require('./routes/my-overview');
 var settings = require('./routes/settings');
 var tracking = require('./routes/tracking');
@@ -55,6 +55,7 @@ app.get('/create', household.view);
 app.post('/create', household.create);
 app.get('/breakdown/:household/:member', myOverview.view);
 app.get('/tracking/:appliance', tracking.toggle);
+app.post('/my-overview/:household', myOverview.addAppliance);
 app.get('/settings', settings.view);
 app.get('/household-options/:household', householdOptions.view);
 app.post('/household-options', householdOptions.create);

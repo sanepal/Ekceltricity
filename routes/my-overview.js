@@ -22,6 +22,28 @@ exports.view = function(req, res) {
   });
 
   var title = household.name + " > " + (memberId == req.userId ? 'My Usage' : member.name + "'s Usage");
+	res.render('my-overview', {'title': title, 'household': household, 'member': member, 'appliances': appliances});
+}
 
-  res.render('my-overview', {'title': title, 'household': household, 'member': member, 'appliances': appliances});
+exports.addAppliance = function(req, res) {
+	console.log("addAppliance userId: " + req.userId);
+	var applianceName = req.body.name;
+	var applianceRate = req.body.rate;
+	console.log("applianceName: " + applianceName + ", applianceRate: " + applianceRate);
+	var applianceJson = 
+	{
+		"id":-1,
+		"owner": req.userId,
+		"name": applianceName,
+		"rate": applianceRate,
+		"usage":[],
+		"status":0
+	}
+	var applianceId = db.createAppliance(applianceJson);
+	if (applianceId == -1) {
+		console.log("error adding appliance for user " + req.userId + " at household " + req.params.household);
+		return;
+	}
+	db.addAppliance(req.params.household, req.userId, applianceId);
+	res.redirect('/breakdown/' + req.params.household + '/' + req.userId);
 }

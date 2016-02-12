@@ -26,13 +26,27 @@ block content
 								div.panel-heading
 									| Control your Appliances
 								div.panel-body
-									div.btn-group.btn-group-justified(role='group' aria-label='...')
-										div.btn-group(role='group')
-											a.btn.btn-success(href='/add-appliance' role='button')
-												| Add Appliance
-										div.btn-group(role='group')
-											a.btn.btn-primary(href='/edit-appliance' button type='button')
-												| Edit
+									button.btn.btn-success.btn-block#addAppliance(href='#' role='button' style="display:#{appliances.length === 0 ? 'none' : 'block'}")
+										| Add Appliance
+									div#addApplianceDiv(hidden=(appliances.length !== 0))
+										hr
+										form.form-horizontal(method="POST" action='/my-overview/#{household.id}/')
+											div.form-group
+												label.col-sm-4.control-label Appliance Name
+												div.col-sm-7
+													input.form-control#addApplianceNameInput(type="text", name="name", required)
+											div.form-group
+												label.col-sm-4.control-label Usage Rate
+												div.col-sm-7
+													div.input-group
+														input.form-control#addApplianceUsageRateInput(type="text", name="rate", value="0.1", required)
+														span.input-group-addon kWh
+											div.col-sm-5.col-sm-offset-1
+												a.btn.btn-default.pull-right#cancelAddAppliance(button type='button')
+													| Cancel
+											div.col-sm-5
+												button.btn.btn-success
+													| Add
 									div.clearfix
 									hr
 									if appliances.length !== 0
@@ -40,17 +54,19 @@ block content
 											for appliance in appliances
 												div.form-group
 													label.col-xs-5.control-label(for='')
-														| #{appliance.name}
+														a(href='#' id='edit#{appliance.id}')
+															| #{appliance.name}&nbsp;
+															span.glyphicon.glyphicon-pencil
 													div.col-xs-7
 														input.form-control.tracking(type='checkbox' data-appliance='#{appliance.id}' checked=(appliance.status == 1))
 														span.help-block(id='helpBlock')
 															| $10.10 this month
-								if appliances.length !== 0
-									div.panel-footer
-										div.center-block(style='text-align:center')
-											a.toggle-appliance(href='#' data-state='shown')
-												| Hide appliances			
-												span.glyphicon.glyphicon-chevron-up
+									if appliances.length !== 0
+										div.panel-footer
+											div.center-block(style='text-align:center')
+												a.toggle-appliance(href='#' data-state='shown')
+													| Hide appliances			
+													span.glyphicon.glyphicon-chevron-up
 						div.clearfix
 						hr
 						h3
@@ -161,6 +177,27 @@ block append scripts
 				}
 				$(this).html(text);
 				$(this).parents(".panel").find(".panel-body").slideToggle();
+		  });
+
+		  $("#addAppliance").on('click', function(evt) {
+		  	evt.preventDefault();
+		  	$("#addApplianceDiv").toggle();
+		  	/*"<div class='form-group'>" +
+		  			"<label class='col-xs-5 control-label' for=''>Appliance Name</label>" + 
+		  			"<div class='col-xs-7'>" + 
+		  				"<input type='checkbox' data-appliance='3' class='form-control tracking'>" +
+		  				"<span class='help-block' id='help-block'>$0 this month</span>" +
+		  			"</div>" +
+		  		"</div>"*/
+		  	$(".tracking").bootstrapSwitch();
+		  });
+		  $("#editAppliances").on('click', function(evt) {
+		  	evt.preventDefault();
+		  });
+		  $("#cancelAddAppliance").on('click', function(evt) {
+		  	evt.preventDefault();
+		  	$("#addApplianceNameInput").val("");
+		  	$("#addApplianceDiv").toggle();
 		  });
 
 		  // Get context with jQuery - using jQuery's .get() method.
