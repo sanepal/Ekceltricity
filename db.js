@@ -16,10 +16,16 @@ exports.createHousehold = function(data) {
   return data.id;
 }
 
+exports.editHousehold = function(data) {
+  households[data.id].name = data.name;
+  households[data.id].rate = data.rate;
+  households[data.id].members = data.members;
+}
+
 exports.createOrGetUser = function(email) {
   if (users[email] === undefined) {
     users[email] = {
-      'name': Math.random().toString(36).substring(7), 
+      'name': email, 
       'id': Object.keys(users).length
     };
   }
