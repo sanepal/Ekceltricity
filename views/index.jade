@@ -34,7 +34,9 @@ block content
                         span.help-block 
                           | $5.14 this month
                 else
-                  | sfsf
+                  h4
+                    a(href="/breakdown/#{household.id}/#{userId}")
+                      | You don't have any appliances! Click here to add one.
 
 block append scripts
   script(src="/js/bootstrap-switch.min.js")

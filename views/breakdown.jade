@@ -28,7 +28,8 @@ block content
 							p.bg-primary(style='padding:15px') Yaswan's A/C has the highest usage so far with 80kW/h ($8.33)!!
 						ul.list-group
 							for member in members
-								a.list-group-item(href='/breakdown/#{household.id}/#{member.id}' style='padding-left:1em') #{member.name} 
+								a.list-group-item(href='/breakdown/#{household.id}/#{member.id}' style='padding-left:1em') 
+									|	#{member.id === userId ? 'You' : member.name}
 									span.glyphicon.glyphicon-chevron-right.pull-right(aria-hidden='true') 
 									span.pull-right $#{member.monthUsage} this month&emsp;
 				hr

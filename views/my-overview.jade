@@ -35,26 +35,30 @@ block content
 												| Edit
 									div.clearfix
 									hr
-									form.form-horizontal
-										for appliance in appliances
-											div.form-group
-												label.col-xs-5.control-label(for='')
-													| #{appliance.name}
-												div.col-xs-7
-													input.form-control.tracking(type='checkbox' data-appliance='#{appliance.id}' checked=(appliance.status == 1))
-													span.help-block(id='helpBlock')
-														| $10.10 this month
-								div.panel-footer
-									div.center-block(style='text-align:center')
-										a.toggle-appliance(href='#' data-state='shown')
-											| Hide appliances			
-											span.glyphicon.glyphicon-chevron-up
+									if appliances.length !== 0
+										form.form-horizontal
+											for appliance in appliances
+												div.form-group
+													label.col-xs-5.control-label(for='')
+														| #{appliance.name}
+													div.col-xs-7
+														input.form-control.tracking(type='checkbox' data-appliance='#{appliance.id}' checked=(appliance.status == 1))
+														span.help-block(id='helpBlock')
+															| $10.10 this month
+								if appliances.length !== 0
+									div.panel-footer
+										div.center-block(style='text-align:center')
+											a.toggle-appliance(href='#' data-state='shown')
+												| Hide appliances			
+												span.glyphicon.glyphicon-chevron-up
 						div.clearfix
 						hr
 						h3
 							| Appliance Usage
 						div.col-md-10.col-md-offset-1
-							canvas(id='applianceChart' max-height='600')
+							if appliances.length === 0
+								p Add some appliances to see a graphical breakdown of your usage.
+							canvas(id='applianceChart' max-height='600' style="display:#{appliances.length === 0 ? 'none' : 'block'}")
 						div.clearfix
 						hr
 						h3
@@ -66,18 +70,37 @@ block content
 							div.panel.panel-default.table-responsive
 								table.table
 									thead
-										th Appliance
-										th Start time
-										th Endtime
+										th 
+											| Appliance
+											span.glyphicon.glyphicon-sort.pull-right
+										th
+											| Start time
+											span.glyphicon.glyphicon-sort.pull-right
+										th
+											| Endtime
+											span.glyphicon.glyphicon-sort.pull-right
 										th
 									tbody
+										tr
+											td
+												select.form-control
+													each appliance in appliances
+														option #{appliance.name}
+											td: input.form-control(type="datetime-local")
+											td: input.form-control(type="datetime-local")
+											td: button.btn.btn-success
+												| Add
 										each appliance in appliances
-											each usage in appliance.usage
+											each usage in appliance.usage												
 												tr
 													td #{appliance.name}
-													td #{moment(usage.start).format('MM/DD/YYYY, hh:mm a')}
-													td #{usage.end === undefined ? '' : moment(usage.end).format('MM/DD/YYYY, hh:mm a')}
-													td 
+													td
+														input.form-control.usage-times(type="datetime-local" value="#{moment(usage.start).format('YYYY-MM-DDThh:mm:ss')}")
+													td
+														input.form-control.usage-times(type="datetime-local" value="#{usage.end === undefined ? '' : moment(usage.end).format('YYYY-MM-DDThh:mm:ss')}")
+													td
+														button.btn.btn-primary.disabled.submit-usage(data-appliance="")
+															| Save
 
 
 
@@ -120,8 +143,10 @@ block append scripts
 		  $(".tracking").on('switchChange.bootstrapSwitch', function(evt, state) {
 		  	$.get('/tracking/' + $(this).data('appliance'));
 		  });
-
 		  $(".table").tablesorter({ sortList: [[0, 0], [1, 0]] });
+		  $(".usage-times").on('change', function(evt) {
+		  	$(this).parents("tr").find(".submit-usage").removeClass('disabled');
+		  });
 		  
 		  $(".toggle-appliance").click(function(evt) {
 				evt.preventDefault();
