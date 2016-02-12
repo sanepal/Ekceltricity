@@ -3,32 +3,22 @@
     "id":0,
     "rate":16.35,
     "name":"College Household",
-    "members": [],
-    "appliances":[  
-      {  
-        "name":"Laptop Charger",
-        "usage":5.43,
-        "status":1
+    "members": [
+      {
+        "id": 0,
+        "appliances": [0, 1]
       },
-      {  
-        "name":"Lamp",
-        "usage":0.26,
-        "status":1
+      {
+        "id": 1,
+        "appliances": [2]
       },
-      {  
-        "name":"Phone Charger",
-        "usage":1.98,
-        "status":1
+      {
+        "id": 2,
+        "appliances": [3]
       },
-      {  
-        "name":"A/C",
-        "usage":8.26,
-        "status":0
-      },
-      {  
-        "name":"Fan",
-        "usage":1.26,
-        "status":0
+      {
+        "id": 3,
+        "appliances": [4]
       }
     ]
   }

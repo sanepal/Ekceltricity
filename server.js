@@ -13,8 +13,7 @@ var index = require('./routes/index');
 var household = require('./routes/household');
 var breakdown = require('./routes/breakdown');
 var myOverview = require('./routes/my-overview');
-var editAppliances = require('./routes/edit-appliances');
-var addAppliances = require('./routes/add-appliances');
+var tracking = require('./routes/tracking');
 
 var app = express();
 
@@ -32,19 +31,27 @@ app.use(express.session());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Moment!
+app.locals.moment = require('moment');
+
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+var loadUser = function(req, res, next) {
+  req.userId = 2;
+  next();
+}
+
 // Add routes here
+app.all('*', loadUser);
 app.get('/', index.view);
-app.get('/breakdown', breakdown.view);
+app.get('/breakdown/:household', breakdown.view);
 app.get('/create', household.view);
 app.post('/create', household.create);
-app.get('/my-overview', myOverview.view);
-app.get('/add-appliances', addAppliances.view);
-app.get('/edit-appliances', editAppliances.view);
+app.get('/breakdown/:household/:member', myOverview.view);
+app.get('/tracking/:appliance', tracking.toggle);
 // Example route
 // app.get('/users', user.list);
 

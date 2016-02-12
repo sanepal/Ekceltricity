@@ -16,7 +16,7 @@ block content
           div.panel.panel-default
             div.panel-heading
               | #{household.name}
-              a(href="/breakdown")
+              a(href="/breakdown/#{household.id}")
                 span.pull-right
                   | Household Breakdown
                   span.glyphicon.glyphicon-chevron-right(aria-hidden="true")
@@ -24,15 +24,15 @@ block content
               form.form-horizontal
                 unless household.appliances.length == 0
                   h4
-                    a(href="/my-overview")
+                    a(href="/breakdown/#{household.id}/2")
                       | Control your appliances
                   for appliance in household.appliances
                     div.form-group
                       label.col-xs-5.control-label(for="") #{appliance.name}
                       div.col-xs-7
-                        input.form-control.tracking(type="checkbox", checked)
+                        input.form-control.tracking(type="checkbox", data-appliance="#{appliance.id}", checked=(appliance.status == 1))
                         span.help-block 
-                          | $#{appliance.usage} this month
+                          | $5.14 this month
                 else
                   | sfsf
 
@@ -41,5 +41,8 @@ block append scripts
   script.
     $(document).ready(function() {
       $(".tracking").bootstrapSwitch();
+      $(".tracking").on('switchChange.bootstrapSwitch', function(evt, state) {
+        $.get('/tracking/' + $(this).data('appliance'));
+      });
     });
 
