@@ -23,6 +23,5 @@ exports.view = function(req, res) {
 
   var title = household.name + " > " + (memberId == req.userId ? 'My Usage' : member.name + "'s Usage");
 
-  res.locals.userId = req.userId;
-	res.render('my-overview', {'title': title, 'household': household, 'member': member, 'appliances': appliances});
+  res.render('my-overview', {'title': title, 'household': household, 'member': member, 'appliances': appliances});
 }
