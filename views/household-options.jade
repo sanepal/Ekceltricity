@@ -1,0 +1,70 @@
+extend ./skeleton.jade
+
+block content
+	div.container
+		div.row
+			div.col-md-8.col-md-offset-2
+				h3 Household Options
+				form.form-horizontal(method="POST", action="/household-options")
+					div.form-group
+						label.col-sm-4.control-label Household Name
+						div.col-sm-7
+							input.form-control(type="text", name="householdName" value="#{household.name}")
+				
+					div.form-group
+							label.col-sm-4.control-label Rate
+							div.col-sm-7
+								div.input-group
+									span.input-group-addon &cent;
+									input.form-control(type="text" class="numbersOnly" name="rate" value="#{household.rate}")
+									span.input-group-addon per kWh
+					h4 Current Members
+					div.col-sm-7.col-sm-offset-2
+						ul.list-group
+								input(type="hidden", name="id", value="#{household.id}")
+							for member in members
+								div.list-group
+									input(type="hidden", name="existingMembers[]", value="#{member.id}")
+									| #{member.name}
+									button.btn.btn-danger.pull-right(onclick="removeMemberFromHousehold(this)", tabindex="-1")
+										span.glyphicon.glyphicon-remove
+						span.help-block
+							| Add extra household members using their email address.
+						div#members
+							for i in [0]
+								div.form-group.input-group
+									input.form-control(type="email", name="newMembers[]")
+							div.form-group
+								button#moreMembers.btn.btn-primary.btn-block Add more members
+						div.col-xs-4
+							a.btn.btn-default.pull-right(href="/", role="button") Cancel
+						div.col-xs-7
+							button.btn.btn-success Save Settings
+
+block append scripts
+	script.
+		$(document).ready(function() {
+			$("#moreMembers").on('click', function(evt) {
+				evt.preventDefault();
+				$("#members .input-group:last").after(
+					"<div class='form-group input-group'>"
+					+ "<input type='email' name='newMembers[]' class='form-control'>"
+				);
+			});
+		})
+
+		function removeMemberFromHousehold(elmt) {
+			console.log($(elmt).parents("div.list-group").text());
+			//- elmt.preventDefault();
+			//- #{household.members}.remove(#{household.members}.IndexOf($(elmt).parents("div.list-group").text()))
+			console.log(household.members);
+			$(elmt).parents("div.list-group").remove();
+		}
+
+
+
+
+
+										
+
+
