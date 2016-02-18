@@ -5,14 +5,14 @@ block content
     div.row
       div.col-md-8.col-md-offset-2
         h3 Sign in to Ekceltricity
-        form.form-horizontal(method="POST", action="/create")
+        form.form-horizontal(method="POST", action="/sign-in")
           div.form-group
-            label.col-sm-4.control-label Username
+            label.col-sm-4.control-label Email
             div.col-sm-7
-              input.form-control(type="text", name="name", required)
+              input.form-control(type="email", name="email", required)
           div.form-group
             label.col-sm-4.control-label Password
             div.col-sm-7
-              input.form-control(type="text", name="name", required)
+              input.form-control(type="password", name="password", required)
           div.col-xs-7.pull-right
             button.btn.btn-success Sign in
