@@ -10,32 +10,28 @@ block content
 					li: a(href="/breakdown/#{householdId}/#{userId}")
 						| My Appliances
 					li
-						| Edit Appliance
+						| Editing #{applianceName}
 
 				hr
-			div.col-md-10.col-md-offset-2
-				h3
-					| Edit "#{applianceName}"
-
-			div.col-md-3.col-md-offset-3
-				form#applianceForm(method='POST' action='/edit-appliance/#{householdId}/#{applianceId}')
+			div.col-md-7.col-md-offset-2
+				form#applianceForm.form-horizontal(method='POST' action='/appliance/edit/#{householdId}/#{applianceId}')
 					div.form-group
-						label(for='applianceName') Appliance Name
-						input.form-control(type='text' name='name' value='#{applianceName}')
+						label.col-sm-4.control-label(for='applianceName') Appliance Name
+						div.col-sm-7
+							input.form-control(type='text' name='name' value='#{applianceName}')
 					div.form-group
-						label(for='applianceRate') Appliance Rate
-						div.input-group
-							input.form-control(type='text' name='rate' value='#{applianceRate}')
-							span.input-group-addon kW/h
-					div.col-sm-4
-						button.btn.btn-default#cancel(type='button')
-							| Cancel
-					div.col-sm-4
-						button.btn.btn-success.pull-right#updateAppliance(type='submit')
+						label.col-sm-4.control-label(for='applianceRate') Appliance Rate
+						div.col-sm-7
+							div.input-group
+								input.form-control(type='text' name='rate' value='#{applianceRate}')
+								span.input-group-addon kW/h
+					div.col-sm-4.col-sm-offset-4
+						button.btn.btn-success.btn-block#updateAppliance(type='submit')
 							| Update
-					div.col-sm-4
-						button.btn.btn-danger.pull-left#deleteAppliance(type='submit')
-							| Delete
+						a.btn.btn-default.btn-block(href="/breakdown/#{householdId}/#{userId}")
+							| Cancel
+						button.btn.btn-danger.btn-block#deleteAppliance
+							| Delete Appliance
 
 block append scripts
 	script.
@@ -46,8 +42,8 @@ block append scripts
 			});
 			$("#deleteAppliance").on('click', function(evt) {
 				evt.preventDefault();
-				$("#applianceForm").attr("method", "GET");
-				$("#applianceForm").attr("action", "/delete-appliance/#{householdId}/#{applianceId}");
+				$("#applianceForm").attr("method", "POST");
+				$("#applianceForm").attr("action", "/appliance/delete/#{householdId}/#{applianceId}");
 				$("#applianceForm").submit();
 			})
 		});

@@ -44,7 +44,7 @@ block append scripts
     $(document).ready(function() {
       $(".tracking").bootstrapSwitch();
       $(".tracking").on('switchChange.bootstrapSwitch', function(evt, state) {
-        $.get('/tracking/' + $(this).data('appliance'));
+        $.post('/appliance/toggle/' + $(this).data('appliance'));
       });
     });
 
