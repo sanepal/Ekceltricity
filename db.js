@@ -61,15 +61,26 @@ exports.editHousehold = function(data) {
   households[idx].members = data.members;
 }
 
-exports.createOrGetUser = function(email) {
+exports.createOrGetUser = function(name, email, password) {
   var newId = ++runningUserId;
   if (users[email] === undefined) {
     users[email] = {
-      'name': email, 
-      'id': newId
+      'name': name, 
+      'id': newId,
+      'password': password
     };
+    return users[email];
   }
-  return users[email];
+  return undefined;
+}
+
+exports.signIn = function(email, password) {
+  if(users[email] != undefined) {
+    if(users[email].password == password) {
+      return true;
+    }
+  } 
+  return false;
 }
 
 exports.getUser = function(id) {
