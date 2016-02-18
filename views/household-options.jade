@@ -5,7 +5,7 @@ block content
 		div.row
 			div.col-md-8.col-md-offset-2
 				h3 Household Options
-				form.form-horizontal(method="POST", action="/household-options")
+				form.form-horizontal(method="POST", action="/household/options")
 					div.form-group
 						label.col-sm-4.control-label Household Name
 						div.col-sm-7
@@ -37,7 +37,7 @@ block content
 							div.form-group
 								button#moreMembers.btn.btn-primary.btn-block Add more members
 						div.col-xs-4
-							a.btn.btn-default.pull-right(href="/", role="button") Cancel
+							a.btn.btn-default.pull-right(href="/household/#{householdId}", role="button") Cancel
 						div.col-xs-7
 							button.btn.btn-success Save Settings
 

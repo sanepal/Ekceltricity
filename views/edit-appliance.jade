@@ -1,0 +1,51 @@
+extends ./skeleton.jade
+
+block content
+	div.container
+		div.row
+			div.col-md-10.col-md-offset-1
+				ol.breadcrumb
+					li: a(href="/breakdown/#{householdId}")
+						| #{householdName}
+					li: a(href="/breakdown/#{householdId}/#{userId}")
+						| My Appliances
+					li
+						| Editing #{applianceName}
+
+				hr
+			div.col-md-7.col-md-offset-2
+				form#applianceForm.form-horizontal(method='POST' action='/appliance/edit/#{householdId}/#{applianceId}')
+					div.form-group
+						label.col-sm-4.control-label(for='applianceName') Appliance Name
+						div.col-sm-7
+							input.form-control(type='text' name='name' value='#{applianceName}')
+					div.form-group
+						label.col-sm-4.control-label(for='applianceRate') Appliance Rate
+						div.col-sm-7
+							div.input-group
+								input.form-control(type='text' name='rate' value='#{applianceRate}')
+								span.input-group-addon kW/h
+					div.col-sm-4.col-sm-offset-4
+						button.btn.btn-success.btn-block#updateAppliance(type='submit')
+							| Update
+						a.btn.btn-default.btn-block(href="/breakdown/#{householdId}/#{userId}")
+							| Cancel
+						button.btn.btn-danger.btn-block#deleteAppliance
+							| Delete Appliance
+
+block append scripts
+	script.
+		$(document).ready(function() {
+			$("#cancel").on('click', function(evt) {
+				parent.history.back();
+				return false;
+			});
+			$("#deleteAppliance").on('click', function(evt) {
+				evt.preventDefault();
+				$("#applianceForm").attr("method", "POST");
+				$("#applianceForm").attr("action", "/appliance/delete/#{householdId}/#{applianceId}");
+				$("#applianceForm").submit();
+			})
+		});
+
+
