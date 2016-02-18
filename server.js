@@ -6,6 +6,10 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
+var db = require('./db');
+
+// init db
+db.init();
 
 // Example route
 // var user = require('./routes/user');
@@ -16,6 +20,8 @@ var myOverview = require('./routes/my-overview');
 var settings = require('./routes/settings');
 var tracking = require('./routes/tracking');
 var householdOptions = require('./routes/household-options');
+var editAppliance = require('./routes/edit-appliance');
+var deleteAppliance = require('./routes/delete-appliance');
 
 var app = express();
 
@@ -59,6 +65,9 @@ app.post('/my-overview/:household', myOverview.addAppliance);
 app.get('/settings', settings.view);
 app.get('/household-options/:household', householdOptions.view);
 app.post('/household-options', householdOptions.create);
+app.get('/edit-appliance/:household/:applianceId', editAppliance.view);
+app.post('/edit-appliance/:householdId/:applianceId', editAppliance.update);
+app.get('/delete-appliance/:householdId/:applianceId', deleteAppliance.view);
 // Example route
 // app.get('/users', user.list);
 
