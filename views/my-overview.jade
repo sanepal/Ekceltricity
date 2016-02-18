@@ -54,19 +54,19 @@ block content
 											for appliance in appliances
 												div.form-group
 													label.col-xs-5.control-label(for='')
-														a(href='#' id='edit#{appliance.id}')
+														a(href='/edit-appliance/#{household.id}/#{appliance.id}')
 															| #{appliance.name}&nbsp;
 															span.glyphicon.glyphicon-pencil
 													div.col-xs-7
 														input.form-control.tracking(type='checkbox' data-appliance='#{appliance.id}' checked=(appliance.status == 1))
 														span.help-block(id='helpBlock')
 															| $10.10 this month
-									if appliances.length !== 0
-										div.panel-footer
-											div.center-block(style='text-align:center')
-												a.toggle-appliance(href='#' data-state='shown')
-													| Hide appliances			
-													span.glyphicon.glyphicon-chevron-up
+								if appliances.length !== 0
+									div.panel-footer
+										div.center-block(style='text-align:center')
+											a.toggle-appliance(href='#' data-state='shown')
+												| Hide appliances			
+												span.glyphicon.glyphicon-chevron-up
 						div.clearfix
 						hr
 						h3
@@ -182,23 +182,28 @@ block append scripts
 		  $("#addAppliance").on('click', function(evt) {
 		  	evt.preventDefault();
 		  	$("#addApplianceDiv").toggle();
-		  	/*"<div class='form-group'>" +
-		  			"<label class='col-xs-5 control-label' for=''>Appliance Name</label>" + 
-		  			"<div class='col-xs-7'>" + 
-		  				"<input type='checkbox' data-appliance='3' class='form-control tracking'>" +
-		  				"<span class='help-block' id='help-block'>$0 this month</span>" +
-		  			"</div>" +
-		  		"</div>"*/
 		  	$(".tracking").bootstrapSwitch();
 		  });
+
 		  $("#editAppliances").on('click', function(evt) {
 		  	evt.preventDefault();
 		  });
+
 		  $("#cancelAddAppliance").on('click', function(evt) {
 		  	evt.preventDefault();
 		  	$("#addApplianceNameInput").val("");
 		  	$("#addApplianceDiv").toggle();
 		  });
+
+		  /*$(".appliance-name").on('click', function(evt) {
+		  	evt.preventDefault();
+		  	var applianceId = $(this).attr('id').split("edit")[1];
+		  	$(this).parent().parent().children(".col-xs-7").find(".help-block").before(
+		  		"<button class='btn btn-success pull-right' onclick='editAppliance(this)'><span class='glyphicon glyphicon-ok'></span></button>" +
+		  		"<button class='btn btn-danger pull-right' onclick='removeAppliance(this)'><span class='glyphicon glyphicon-remove'></span></button>"
+		  		
+		  	)
+		  });*/
 
 		  // Get context with jQuery - using jQuery's .get() method.
 		  var ctx = $("#applianceChart").get(0).getContext("2d");

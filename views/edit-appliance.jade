@@ -1,0 +1,55 @@
+extends ./skeleton.jade
+
+block content
+	div.container
+		div.row
+			div.col-md-10.col-md-offset-1
+				ol.breadcrumb
+					li: a(href="/breakdown/#{householdId}")
+						| #{householdName}
+					li: a(href="/breakdown/#{householdId}/#{userId}")
+						| My Appliances
+					li
+						| Edit Appliance
+
+				hr
+			div.col-md-10.col-md-offset-2
+				h3
+					| Edit "#{applianceName}"
+
+			div.col-md-3.col-md-offset-3
+				form#applianceForm(method='POST' action='/edit-appliance/#{householdId}/#{applianceId}')
+					div.form-group
+						label(for='applianceName') Appliance Name
+						input.form-control(type='text' name='name' value='#{applianceName}')
+					div.form-group
+						label(for='applianceRate') Appliance Rate
+						div.input-group
+							input.form-control(type='text' name='rate' value='#{applianceRate}')
+							span.input-group-addon kW/h
+					div.col-sm-4
+						button.btn.btn-default#cancel(type='button')
+							| Cancel
+					div.col-sm-4
+						button.btn.btn-success.pull-right#updateAppliance(type='submit')
+							| Update
+					div.col-sm-4
+						button.btn.btn-danger.pull-left#deleteAppliance(type='submit')
+							| Delete
+
+block append scripts
+	script.
+		$(document).ready(function() {
+			$("#cancel").on('click', function(evt) {
+				parent.history.back();
+				return false;
+			});
+			$("#deleteAppliance").on('click', function(evt) {
+				evt.preventDefault();
+				$("#applianceForm").attr("method", "GET");
+				$("#applianceForm").attr("action", "/delete-appliance/#{householdId}/#{applianceId}");
+				$("#applianceForm").submit();
+			})
+		});
+
+
