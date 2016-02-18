@@ -16,10 +16,7 @@ var household = require('./routes/household');
 var breakdown = require('./routes/breakdown');
 var settings = require('./routes/settings');
 var appliance = require('./routes/appliance');
-var welcome = require('./routes/welcome');
-var signUp = require('./routes/sign-up');
-var signIn = require('./routes/sign-in');
-
+var user = require('./routes/user');
 
 var app = express();
 
@@ -72,9 +69,11 @@ app.post('/appliance/add/:household', appliance.add);
 app.post('/appliance/edit/:householdId/:applianceId', appliance.update);
 app.post('/appliance/delete/:householdId/:applianceId', appliance.delete);
 
-app.get('/welcome', welcome.view);
-app.get('/sign-up', signUp.view);
-app.get('/sign-in', signIn.view)
+app.get('/welcome', user.view);
+app.get('/sign-up', user.view);
+app.post('/sign-up', user.signUp);
+app.get('/sign-in', user.view)
+app.post('/sign-in', user.signIn);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
