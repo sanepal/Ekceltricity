@@ -1,0 +1,18 @@
+extend ./skeleton.jade
+
+block content
+  div.container
+    div.row
+      div.col-md-8.col-md-offset-2
+        h3 Sign in to Ekceltricity
+        form.form-horizontal(method="POST", action="/create")
+          div.form-group
+            label.col-sm-4.control-label Username
+            div.col-sm-7
+              input.form-control(type="text", name="name", required)
+          div.form-group
+            label.col-sm-4.control-label Password
+            div.col-sm-7
+              input.form-control(type="text", name="name", required)
+          div.col-xs-7.pull-right
+            button.btn.btn-success Sign in

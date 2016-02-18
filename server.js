@@ -16,6 +16,9 @@ var myOverview = require('./routes/my-overview');
 var settings = require('./routes/settings');
 var tracking = require('./routes/tracking');
 var householdOptions = require('./routes/household-options');
+var welcome = require('./routes/welcome');
+var signUp = require('./routes/sign-up');
+var signIn = require('./routes/sign-in');
 
 var app = express();
 
@@ -59,6 +62,10 @@ app.post('/my-overview/:household', myOverview.addAppliance);
 app.get('/settings', settings.view);
 app.get('/household-options/:household', householdOptions.view);
 app.post('/household-options', householdOptions.create);
+app.get('/welcome', welcome.view);
+app.get('/sign-up', signUp.view);
+app.get('/sign-in', signIn.view);
+
 // Example route
 // app.get('/users', user.list);
 
