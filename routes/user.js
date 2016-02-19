@@ -1,21 +1,18 @@
 var db = require('../db');
 
 exports.viewSignIn = function(req, res) {
-
   res.render('sign-in', {
     'title': 'Ekceltricity'
   });
 }
 
 exports.viewSignUp = function(req, res) {
-
   res.render('sign-up', {
     'title': 'Ekceltricity'
   });
 }
 
 exports.viewWelcome = function(req, res) {
-
   res.render('welcome', {
     'title': 'Ekceltricity'
   });
@@ -35,7 +32,7 @@ exports.signUp = function(req, res) {
 	var password = req.body.password;
 
 	var success = db.createOrGetUser(name, email, password);
-	if(success != undefined) {
+	if(success !== undefined) {
 		req.session.userId = db.signIn(email, password);
 		res.redirect('/');
 	} else {
@@ -45,6 +42,7 @@ exports.signUp = function(req, res) {
 
 exports.logout = function(req, res) {
 	req.session.userId = null;
+    req.session.destroy();
 	res.redirect('/');
 }
 

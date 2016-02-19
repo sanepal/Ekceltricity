@@ -12,7 +12,7 @@ block content
 					li: a(href="/breakdown/#{household.id}")
 						| #{household.name}
 					li
-						| #{userId == member.id ? 'My Appliances' : member.name + "'s Appliances"}
+						| #{readOnly ? member.name + "'s Appliances" : 'My Appliances'}
 				hr
 				nav
 					ul.nav.nav-tabs(data-tabs="tabs", role="tab-list")
@@ -24,41 +24,45 @@ block content
 						div.col-md-8.col-md-offset-2
 							div.panel.panel-default
 								div.panel-heading
-									| Control your Appliances
+									| #{ readOnly ? "Viewing " + member.name + "'s appliances": 'Control your appliances'}
 								div.panel-body
-									button.btn.btn-success.btn-block#addAppliance(href='#' role='button' style="display:#{appliances.length === 0 ? 'none' : 'block'}")
-										| Add Appliance
-									div#addApplianceDiv(hidden=(appliances.length !== 0))
+									unless readOnly
+										button.btn.btn-success.btn-block#addAppliance(href='#' role='button' style="display:#{appliances.length === 0 ? 'none' : 'block'}")
+											| Add Appliance
+										div#addApplianceDiv(hidden=(appliances.length !== 0))
+											hr
+											form.form-horizontal(method="POST" action='/appliance/add/#{household.id}/')
+												div.form-group
+													label.col-sm-4.control-label Appliance Name
+													div.col-sm-7
+														input.form-control#addApplianceNameInput(type="text", name="name", required)
+												div.form-group
+													label.col-sm-4.control-label Usage Rate
+													div.col-sm-7
+														div.input-group
+															input.form-control#addApplianceUsageRateInput(type="text", name="rate", value="0.1", required)
+															span.input-group-addon kWh
+												div.col-sm-5.col-sm-offset-1
+													a.btn.btn-default.pull-right#cancelAddAppliance(button type='button')
+														| Cancel
+												div.col-sm-5
+													button.btn.btn-success
+														| Add
+										div.clearfix
 										hr
-										form.form-horizontal(method="POST" action='/appliance/add/#{household.id}/')
-											div.form-group
-												label.col-sm-4.control-label Appliance Name
-												div.col-sm-7
-													input.form-control#addApplianceNameInput(type="text", name="name", required)
-											div.form-group
-												label.col-sm-4.control-label Usage Rate
-												div.col-sm-7
-													div.input-group
-														input.form-control#addApplianceUsageRateInput(type="text", name="rate", value="0.1", required)
-														span.input-group-addon kWh
-											div.col-sm-5.col-sm-offset-1
-												a.btn.btn-default.pull-right#cancelAddAppliance(button type='button')
-													| Cancel
-											div.col-sm-5
-												button.btn.btn-success
-													| Add
-									div.clearfix
-									hr
 									if appliances.length !== 0
 										form.form-horizontal
 											for appliance in appliances
 												div.form-group
 													label.col-xs-5.control-label(for='')
-														a(href='/appliance/edit/#{household.id}/#{appliance.id}')
-															| #{appliance.name}&nbsp;
-															span.glyphicon.glyphicon-pencil
+														if readOnly
+															| #{appliance.name}
+														else
+															a(href='/appliance/edit/#{household.id}/#{appliance.id}')
+																| #{appliance.name}&nbsp;
+																span.glyphicon.glyphicon-pencil
 													div.col-xs-7
-														input.form-control.tracking(type='checkbox' data-appliance='#{appliance.id}' checked=(appliance.status == 1))
+														input.form-control.tracking(type='checkbox' data-appliance='#{appliance.id}' checked=(appliance.status == 1) readonly=(readOnly))
 														span.help-block(id='helpBlock')
 															| $10.10 this month
 								if appliances.length !== 0
@@ -156,9 +160,9 @@ block append scripts
 		]};
 		$(document).ready(function() {
 		  $(".tracking").bootstrapSwitch();
-		  $(".tracking").on('switchChange.bootstrapSwitch', function(evt, state) {
-		  	$.post('/appliance/toggle/' + $(this).data('appliance'));
-		  });
+			$(".tracking").on('switchChange.bootstrapSwitch', function(evt, state) {
+				$.post('/appliance/toggle/' + $(this).data('appliance'));
+			});
 		  $(".table").tablesorter({ sortList: [[0, 0], [1, 0]] });
 		  $(".usage-times").on('change', function(evt) {
 		  	$(this).parents("tr").find(".submit-usage").removeClass('disabled');

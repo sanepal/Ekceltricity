@@ -31,8 +31,9 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.cookieParser('Intro HCI secret key'));
 app.use(express.session());
-app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+// Router after static file server
+app.use(app.router);
 
 // Moment!
 app.locals.moment = require('moment');
@@ -43,15 +44,14 @@ if ('development' == app.get('env')) {
 }
 
 var loadUser = function(req, res, next) {
-  req.userId = 2;
-  res.locals.userId = req.userId;
-  res.locals.login = req.session.userId;
+  res.locals.userId = req.session.userId;
+  console.log(req.session.userId);
   next();
 }
 
 var authenticate = function(req, res, next) {
-	if(req.session.userId == null) {
-		res.redirect('/sign-in');
+	if(req.session.userId === undefined) {
+		res.redirect('/login');
 	} else {
 		next();
 	}
@@ -60,11 +60,12 @@ var authenticate = function(req, res, next) {
 // Add routes here
 app.all('*', loadUser);
 
-app.get('/sign-in', user.viewSignIn);
 app.get('/welcome', user.viewWelcome);
-app.get('/sign-up', user.viewSignUp);
-app.post('/sign-up', user.signUp);
-app.post('/sign-in', user.signIn);
+app.get('/login', user.viewSignIn);
+app.post('/login', user.signIn);
+
+app.get('/signup', user.viewSignUp);
+app.post('/signup', user.signUp);
 
 app.all('*', authenticate);
 

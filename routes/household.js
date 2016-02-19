@@ -5,6 +5,7 @@ exports.view = function(req, res) {
 }
 
 exports.create = function(req, res) {
+  var userId = req.session.userId;
   var household = req.body;
   var members = [];
 
@@ -20,12 +21,11 @@ exports.create = function(req, res) {
   }
 
   // Add current user to household
-  members.push({'id': req.userId, 'appliances': []});
+  members.push({'id': userId, 'appliances': []});
   household.members = members;
   var id = db.createHousehold(household);
 
-  // TODO: Redirect to my appliances page for this household 
-  res.redirect('/breakdown/' + id + '/' + req.userId);
+  res.redirect('/breakdown/' + id + '/' + userId);
 }
 
 exports.viewOptions = function(req, res) {
@@ -70,7 +70,7 @@ exports.update = function(req, res) {
   });
 
   // Add current user to household
-  // members.push({'id': req.userId, 'appliances': []});
+  // members.push({'id': userId, 'appliances': []});
   household.members = members;
   household.id = req.body.id;
   household.rate = req.body.rate;
