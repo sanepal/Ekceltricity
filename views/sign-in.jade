@@ -10,6 +10,8 @@ block content
           div.panel-body
             form.form-horizontal(method="POST", action="/login")
               div.form-group
+                label.col-sm-10.control-label #{messages}
+              div.form-group
                 label.col-sm-4.control-label Email
                 div.col-sm-7
                   input.form-control(type="email", name="email", required, autofocus)
@@ -18,7 +20,7 @@ block content
                 div.col-sm-7
                   input.form-control(type="password", name="password", required)
               div.form-group
-                div.col-xs-2.pull-right
+                div.col-xs-3.pull-right
                   button.btn.btn-success Sign in
     hr
     div.row

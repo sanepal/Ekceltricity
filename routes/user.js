@@ -1,9 +1,8 @@
 var db = require('../db');
 
 exports.viewSignIn = function(req, res) {
-  res.render('sign-in', {
-    'title': 'Ekceltricity'
-  });
+	req.session.messages = [];
+	res.render('sign-in', {'title': 'Ekceltricity'});
 }
 
 exports.viewSignUp = function(req, res) {
@@ -22,8 +21,15 @@ exports.signIn = function(req, res) {
 	var email = req.body.email;
 	var password = req.body.password;
 	var success = db.signIn(email, password);
-	req.session.userId = success;
-	res.redirect('/');
+	if(success >= 0) {
+		req.session.userId = success;
+		req.session.email = email;
+		res.redirect('/');
+	} else {
+		req.session.messages = [];
+		req.session.messages.push("Invalid email/password combination");
+		res.redirect('/sign-in');
+	}
 }
 
 exports.signUp = function(req, res) {
@@ -34,6 +40,7 @@ exports.signUp = function(req, res) {
 	var success = db.createOrGetUser(name, email, password);
 	if(success !== undefined) {
 		req.session.userId = db.signIn(email, password);
+		req.session.email = email;
 		res.redirect('/');
 	} else {
 		//show error message

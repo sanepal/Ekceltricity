@@ -45,7 +45,8 @@ if ('development' == app.get('env')) {
 
 var loadUser = function(req, res, next) {
   res.locals.userId = req.session.userId;
-  console.log(req.session.userId);
+  res.locals.email = req.session.email;
+  res.locals.messages = req.session.messages;
   next();
 }
 
@@ -71,6 +72,7 @@ app.all('*', authenticate);
 
 app.get('/', index.view);
 app.get('/settings', settings.view);
+app.post('/changePassword', settings.changePassword);
 
 app.get('/create', household.view);
 app.post('/create', household.create);

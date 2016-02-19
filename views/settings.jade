@@ -3,14 +3,30 @@ extend ./skeleton.jade
 block content
 	div.container
 		div.panel.panel-default
-			div-panel-heading
-				h4
-					| Settings
+			div.panel-heading
+				| Change password
 			div.panel-body
-					form.form-horizontal
-							div-form-group
-									a.btn.btn-primary.btn-lg.btn-block(role="button", href="/changePassword")
-										| Change Password
+				form.form-horizontal(method="POST", action="/changePassword")
+					div.form-group
+						label.col-sm-8.control-label #{messages}
+					div.form-group
+						label.col-sm-4.control-label Old password
+						div.col-sm-7
+							input.form-control(type="password", name="oldPassword", required, autofocus)
+					div.form-group
+						label.col-sm-4.control-label New password
+						div.col-sm-7
+							input.form-control(type="password", name="newPassword", required)
+					div.form-group
+						label.col-sm-4.control-label Confirm new password
+						div.col-sm-7
+							input.form-control(type="password", name="confirmPassword", required)
+							input.form-control(type="hidden", value="")
+					div.form-group
+						div.col-xs-4.pull-right
+							button.btn.btn-success Update password
+
+
 										
 
 

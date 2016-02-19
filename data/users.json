@@ -9,7 +9,7 @@
     "name": "Rahul",
     "password" : "123" 
   },
-  "dt@uc":{
+  "dqthai@ucsd.edu":{
     "id": 2,
     "name": "Dan",
     "password" : "123" 
@@ -17,11 +17,6 @@
   "yy@uc":{    
     "id": 3,
     "name": "Yaswan",
-    "password" : "123" 
-  },
-  "dqthai@ucsd.edu":{
-    "id": 4,
-    "name": "Danny",
     "password" : "123" 
   }
 }
