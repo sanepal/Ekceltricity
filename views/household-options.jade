@@ -26,7 +26,7 @@ block content
 								div.list-group
 									input(type="hidden", name="existingMembers[]", value="#{member.id}")
 									| #{member.name}
-									button.btn.btn-danger.pull-right(onclick="removeMemberFromHousehold(this)", tabindex="-1")
+									button.btn.btn-danger.pull-right(onclick="removeMemberFromHousehold(this)", tabindex="-1", type="button")
 										span.glyphicon.glyphicon-remove
 						span.help-block
 							| Add extra household members using their email address.
@@ -35,7 +35,7 @@ block content
 								div.form-group.input-group
 									input.form-control(type="email", name="newMembers[]")
 							div.form-group
-								button#moreMembers.btn.btn-primary.btn-block Add more members
+								button#moreMembers.btn.btn-primary.btn-block(type="button") Add more members
 						div.col-xs-4
 							a.btn.btn-default.pull-right(href="/household/#{householdId}", role="button") Cancel
 						div.col-xs-7
@@ -54,10 +54,6 @@ block append scripts
 		})
 
 		function removeMemberFromHousehold(elmt) {
-			console.log($(elmt).parents("div.list-group").text());
-			//- elmt.preventDefault();
-			//- #{household.members}.remove(#{household.members}.IndexOf($(elmt).parents("div.list-group").text()))
-			console.log(household.members);
 			$(elmt).parents("div.list-group").remove();
 		}
 
