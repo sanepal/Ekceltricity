@@ -44,7 +44,7 @@ block content
 															input.form-control#addApplianceUsageRateInput(type="text", name="rate", value="0.1", required)
 															span.input-group-addon kWh
 												div.col-sm-5.col-sm-offset-1
-													a.btn.btn-default.pull-right#cancelAddAppliance(button type='button')
+													a.btn.btn-default.pull-right#cancelAddAppliance
 														| Cancel
 												div.col-sm-5
 													button.btn.btn-success
@@ -85,40 +85,38 @@ block content
 							canvas(id='dailyChart' max-height='600')
 					div#logs.tab-pane
 						div.col-md-10.col-md-offset-1
-							div.panel.panel-default.table-responsive
-								table.table
-									thead
-										th 
-											| Appliance
-											span.glyphicon.glyphicon-sort.pull-right
-										th
-											| Start time
-											span.glyphicon.glyphicon-sort.pull-right
-										th
-											| Endtime
-											span.glyphicon.glyphicon-sort.pull-right
-										th
-									tbody
-										tr
-											td
-												select.form-control
-													each appliance in appliances
-														option #{appliance.name}
-											td: input.form-control(type="datetime-local")
-											td: input.form-control(type="datetime-local")
-											td: button.btn.btn-success
-												| Add
-										each appliance in appliances
-											each usage in appliance.usage												
+							each appliance in appliances
+								div.panel.panel-default.table-responsive
+									div.panel-heading
+										| #{appliance.name}
+										a.pull-right.toggle-logs(data-state="hidden")
+											| View&nbsp;
+											span.glyphicon.glyphicon-chevron-down
+									table.table(style="display:none")
+										thead
+											th
+												| Start time
+											th
+												| Endtime
+											unless readOnly
+												th
+										tbody
+											each usage, index in appliance.usage												
 												tr
-													td #{appliance.name}
 													td
-														input.form-control.usage-times(type="datetime-local" value="#{moment(usage.start).format('YYYY-MM-DDThh:mm:ss')}")
+														if readOnly
+															| #{moment(usage.start).format('MM/DD/YYYY hh:mm:ss')}
+														else 
+															input.form-control.usage-times(type="datetime-local" value="#{moment(usage.start).format('YYYY-MM-DDThh:mm:ss')}")
 													td
-														input.form-control.usage-times(type="datetime-local" value="#{usage.end === undefined ? '' : moment(usage.end).format('YYYY-MM-DDThh:mm:ss')}")
-													td
-														button.btn.btn-primary.disabled.submit-usage(data-appliance="")
-															| Save
+														if readOnly
+															| #{usage.end === undefined ? '' : moment(usage.end).format('MM/DD/YYYY hh:mm:ss')}
+														else 
+															input.form-control.usage-times(type="datetime-local" value="#{usage.end === undefined ? '' : moment(usage.end).format('YYYY-MM-DDThh:mm:ss')}")
+													unless readOnly
+														td
+															button.btn.btn-primary.disabled.submit-usage(data-appliance="#{appliance.id}" data-usage="#{usage.id}" data-index="#{index}")
+																| Save
 
 
 
@@ -132,7 +130,6 @@ block append scripts
 	script(src='/js/Chart.js')
 	script(src='/js/chart-config.js')
 	script(src='/js/bootstrap-switch.min.js')
-	script(src='/js/jquery.tablesorter.min.js')
 	script.
 		var pieData = !{JSON.stringify(pieData)};
 		var barData = {
@@ -161,25 +158,12 @@ block append scripts
 			$(".tracking").on('switchChange.bootstrapSwitch', function(evt, state) {
 				$.post('/appliance/toggle/' + $(this).data('appliance'));
 			});
-		  $(".table").tablesorter({ sortList: [[0, 0], [1, 0]] });
 		  $(".usage-times").on('change', function(evt) {
 		  	$(this).parents("tr").find(".submit-usage").removeClass('disabled');
 		  });
-		  
-		  $(".toggle-appliance").click(function(evt) {
-				evt.preventDefault();
-				var text = '';
-				var state = $(this).data("state");
-				if (state === "hidden") {
-				  text = 'Hide appliances <span class="glyphicon glyphicon-chevron-up"></span>';
-				  $(this).data("state", "shown");
-				} else {
-				  text = 'Show appliances <span class="glyphicon glyphicon-chevron-down"></span>';
-				  $(this).data("state", "hidden");
-				}
-				$(this).html(text);
-				$(this).parents(".panel").find(".panel-body").slideToggle();
-		  });
+
+		  $(".submit-usage").on('click', saveLog);		  
+		  $(".toggle-logs").on('click', toggleLogs); 
 
 		  $("#addAppliance").on('click', function(evt) {
 		  	evt.preventDefault();
@@ -193,15 +177,36 @@ block append scripts
 		  	$("#addApplianceDiv").toggle();
 		  });		  
 
-		  $('a[href="#breakdown"]').on('shown.bs.tab', function(e) {
-		  	if (!chartsInitialized) {
-		  		var ctx = $("#applianceChart").get(0).getContext("2d");		  		
-			   	var myNewChart = new Chart(ctx).Pie(pieData);
-			  	$("#applianceChart").after(myNewChart.generateLegend());
-
-			  	var ctx = $("#dailyChart").get(0).getContext("2d");
-			  	var myNewChart = new Chart(ctx).Bar(barData);
-			  	chartsInitialized = true;
-		  	}
-			});
+		  $('a[href="#breakdown"]').on('shown.bs.tab', initCharts);
 		});
+
+		function saveLog(evt) {
+			console.log($(this).closest("tr"));
+		}
+
+		function toggleLogs(evt) {
+			evt.preventDefault();
+			var text = '';
+			var state = $(this).data("state");
+			if (state === "hidden") {
+				text = 'Hide <span class="glyphicon glyphicon-chevron-up"></span>';
+				$(this).data("state", "shown");
+			} else {
+				text = 'Show <span class="glyphicon glyphicon-chevron-down"></span>';
+				$(this).data("state", "hidden");
+			}
+			$(this).html(text);
+			$(this).parents(".panel").find(".table").slideToggle();
+		}
+
+		function initCharts(evt) {
+			if (!chartsInitialized) {
+				var ctx = $("#applianceChart").get(0).getContext("2d");		  		
+					var myNewChart = new Chart(ctx).Pie(pieData);
+				$("#applianceChart").after(myNewChart.generateLegend());
+
+				var ctx = $("#dailyChart").get(0).getContext("2d");
+				var myNewChart = new Chart(ctx).Bar(barData);
+				chartsInitialized = true;
+			}
+		}

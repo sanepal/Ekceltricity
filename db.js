@@ -192,7 +192,8 @@ exports.toggle = function(applianceId) {
     appliances[applianceIdx].usage[appliances[applianceIdx].usage.length - 1].end = Date.now();
     appliances[applianceIdx].status = 0;
   } else {
-    appliances[applianceIdx].usage.push({'start': Date.now()});
+    var usageId = appliances[applianceIdx].usage.length;
+    appliances[applianceIdx].usage.push({'id': usageId, 'start': Date.now()});
     appliances[applianceIdx].status = 1;
   }
 }
