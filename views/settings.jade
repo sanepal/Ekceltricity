@@ -7,8 +7,13 @@ block content
 				| Change password
 			div.panel-body
 				form.form-horizontal(method="POST", action="/changePassword")
-					div.form-group
-						label.col-sm-8.control-label #{messages}
+					if messages.length > 0
+						if messages[0] == "error"
+							div.form-group.text-center
+								label.alert.alert-warning #{messages[1]}
+						else 
+							div.form-group.text-center
+								label.alert.alert-success #{messages[0]}
 					div.form-group
 						label.col-sm-4.control-label Old password
 						div.col-sm-7

@@ -1,21 +1,17 @@
 extend ./skeleton.jade
 
 block content
+	link(href="/css/style.css", rel="stylesheet", type="text/css")
 	div.row
 		div.col-md-5.col-md-offset-4
-			div.panel.panel-default
-				div.panel-heading.text-center
-					| Ekceltricity In Your Hands
-				div.panel-body
-					p Friends living together often come up with different schemes for how rent and utilities are split up and it can often be complex. While many choose to split everything equally, often times there is a need to charge one person more or less depending on their consumption of some utilities, or if they have guests stay over for extended periods. It can be hard to quantify whether someone is using significantly more electricity or water, or whether you are unfairly paying for someone’s significant other to spend large amounts of time at your house. This activity could benefit from additional tools that help quantify how your daily habits can impact the final bill you have to pay.
-					div.container
-						div.row
-							div.col-lg-4.col-lg-offset-1
-								a.btn.btn-primary.btn-lg.btn-block(role="button", href="/login")
-									| Sign In
-				hr
-				div.panel-body
-					p the app helps individuals and households collect and monitor their energy usage. With our data depiction features, our users can understand which of their appliances use the most energy and they can make informed decisions about changing their usage patterns to conserve or adjust their energy consumption. One of our major target audiences is college students, who often share an apartment together and have difficulty splitting the energy bill fairly. Often times, energy usage is disproportionate, with some people using more and others using less. By developing an app that streamlines the process of tracking energy usage and comparing usage among other people, we hope to make it easier to understand who uses how much energy. 
-						a(href="/signup")
-							| Sign Up for free
+			h2 Ekceltricity In Your Hands
+			p Friends living together often split everything equally, but it is more fair to pay for what you use.
+				div.container
+					div.row
+						div.col-lg-4.col-lg-offset-1
+							a.btn.btn-primary.btn-lg.btn-block(role="button", href="/login")
+								| Sign In
+			p This app helps individuals and households collect and monitor their energy usage. With our data depiction features, our users can understand which of their appliances use the most energy and they can make informed decisions about changing their usage patterns to conserve or adjust their energy consumption. 
+				a(href="/signup")
+					| Sign Up for free
 

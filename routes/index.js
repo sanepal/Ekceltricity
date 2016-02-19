@@ -14,9 +14,12 @@ exports.view = function(req, res) {
       }
     });
   });
-
-  res.render('index', {
-    'title': 'Ekceltricity',
-    'households': households
-  });
+  if(res.locals.userId) {
+    res.render('index', {
+      'title': 'Ekceltricity',
+      'households': households
+    });
+  } else {
+    res.redirect('/welcome');
+  }
 }

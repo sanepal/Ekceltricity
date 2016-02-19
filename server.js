@@ -46,7 +46,11 @@ if ('development' == app.get('env')) {
 var loadUser = function(req, res, next) {
   res.locals.userId = req.session.userId;
   res.locals.email = req.session.email;
-  res.locals.messages = req.session.messages;
+  if(req.session.messages) {
+  	res.locals.messages = req.session.messages;
+  } else {
+  	res.locals.messages = [];
+  }
   next();
 }
 
@@ -67,10 +71,10 @@ app.post('/login', user.signIn);
 
 app.get('/signup', user.viewSignUp);
 app.post('/signup', user.signUp);
+app.get('/', index.view);
 
 app.all('*', authenticate);
 
-app.get('/', index.view);
 app.get('/settings', settings.view);
 app.post('/changePassword', settings.changePassword);
 

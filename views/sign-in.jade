@@ -9,8 +9,9 @@ block content
             | Sign in to Ekceltricity
           div.panel-body
             form.form-horizontal(method="POST", action="/login")
-              div.form-group
-                label.col-sm-10.control-label #{messages}
+              if messages.length > 0
+                div.form-group.text-center
+                  label.alert.alert-warning #{messages}
               div.form-group
                 label.col-sm-4.control-label Email
                 div.col-sm-7

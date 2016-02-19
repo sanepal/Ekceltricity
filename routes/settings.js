@@ -13,8 +13,20 @@ exports.changePassword = function(req, res) {
 	console.log(email);
 	if(newPassword === confirmPassword) {
 		var success = db.changePassword(email, oldPassword, newPassword);
+		if(success) {
+			req.session.messages = [];
+			req.session.messages.push("Password has been changed successfully");
+			res.redirect('/settings');
+		} else {
+			req.session.messages = [];
+			req.session.messages.push("error");
+			req.session.messages.push("Invalid current password");
+			res.redirect('/settings');
+		}
+	} else {
 		req.session.messages = [];
-		req.session.messages.push("Password has been changed successfully");
+		req.session.messages.push("error");
+		req.session.messages.push("Password do not match");
 		res.redirect('/settings');
 	}
 }
