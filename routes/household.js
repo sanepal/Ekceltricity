@@ -14,7 +14,7 @@ exports.create = function(req, res) {
       if (email === '') {
         return;
       }
-      var member = db.createOrGetUser(email);
+      var member = db.createOrGetUser(email, email, null);
       members.push({'id': member.id, 'appliances': []});
     });
   }
@@ -57,7 +57,7 @@ exports.update = function(req, res) {
     if (email === '') {
       return;
     }
-    var member = db.createOrGetUser(email);
+    var member = db.createOrGetUser(email, email, null);
     members.push({'id': member.id, 'appliances': []});
   });
 

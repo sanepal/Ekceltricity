@@ -14,5 +14,10 @@
   "yy@uc":{    
     "id": 3,
     "name": "Yaswan"
+  },
+  "dqthai@ucsd.edu":{
+    "id": 4,
+    "name": "Danny",
+    "password" : "123" 
   }
 }

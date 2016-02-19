@@ -77,10 +77,10 @@ exports.createOrGetUser = function(name, email, password) {
 exports.signIn = function(email, password) {
   if(users[email] != undefined) {
     if(users[email].password == password) {
-      return true;
+      return users[email].id;
     }
   } 
-  return false;
+  return -1;
 }
 
 exports.getUser = function(id) {

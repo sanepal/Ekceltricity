@@ -45,11 +45,29 @@ if ('development' == app.get('env')) {
 var loadUser = function(req, res, next) {
   req.userId = 2;
   res.locals.userId = req.userId;
+  res.locals.login = req.session.userId;
   next();
+}
+
+var authenticate = function(req, res, next) {
+	if(req.session.userId == null) {
+		res.redirect('/sign-in');
+	} else {
+		next();
+	}
 }
 
 // Add routes here
 app.all('*', loadUser);
+
+app.get('/sign-in', user.viewSignIn);
+app.get('/welcome', user.viewWelcome);
+app.get('/sign-up', user.viewSignUp);
+app.post('/sign-up', user.signUp);
+app.post('/sign-in', user.signIn);
+
+app.all('*', authenticate);
+
 app.get('/', index.view);
 app.get('/settings', settings.view);
 
@@ -69,11 +87,7 @@ app.post('/appliance/add/:household', appliance.add);
 app.post('/appliance/edit/:householdId/:applianceId', appliance.update);
 app.post('/appliance/delete/:householdId/:applianceId', appliance.delete);
 
-app.get('/welcome', user.view);
-app.get('/sign-up', user.view);
-app.post('/sign-up', user.signUp);
-app.get('/sign-in', user.view)
-app.post('/sign-in', user.signIn);
+app.get('/logout', user.logout);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
