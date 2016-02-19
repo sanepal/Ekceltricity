@@ -60,7 +60,9 @@ block content
 													div.col-xs-7
 														input.form-control.tracking(type='checkbox' data-appliance='#{appliance.id}' checked=(appliance.status == 1))
 														span.help-block(id='helpBlock')
-															| $10.10 this month
+															each applianceCostEntry in applianceMonthCosts
+																if applianceCostEntry.applianceName == appliance.name
+																	| $#{applianceCostEntry.cost} this month 
 								if appliances.length !== 0
 									div.panel-footer
 										div.center-block(style='text-align:center')
@@ -123,34 +125,46 @@ block content
 block append scripts
 	- var colors = ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"];
 	- var highlights = ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"];
+	- var now = new Date(Date.now());
 	- var pieData = [];
+	- var labels = [];
+	- var barTotalData = [0, 0, 0, 0, 0, 0, 0];
+	- var barMyData = [0, 0, 0, 0, 0, 0, 0];
 	each usage, index in memberApplianceUsage
 		- pieData.push({'value':usage.totalUsage, 'label':usage.applianceName, 'color':colors[index % 4], 'highlight':highlights[index % 4]});
-
+	each day, i in weekBreakdown
+		- labels.push(((now.getMonth() + 1) % 12) + "/" + (now.getDate() - 6 + i));
+		each mem, j in day
+			- barTotalData[i] += mem.usage;
+			if member.name == mem.name
+				- barMyData[i] += mem.usage;
 	script(src='/js/Chart.js')
 	script(src='/js/chart-config.js')
 	script(src='/js/bootstrap-switch.min.js')
 	script(src='/js/jquery.tablesorter.min.js')
 	script.
 		var pieData = !{JSON.stringify(pieData)};
+		var labels = !{JSON.stringify(labels)};
+		var barTotalData = !{JSON.stringify(barTotalData)};
+		var barMyData = !{JSON.stringify(barMyData)};
 		var barData = {
-		labels: ["1/1", "1/2", "1/3", "1/4", "1/5", "1/6", "1/7"],
+		labels: labels,
 		datasets: [
 			{
-				label: "My First dataset",
+				label: "Total household usage this week",
 				fillColor: "rgba(220,220,220,0.5)",
 				strokeColor: "rgba(220,220,220,0.8)",
 				highlightFill: "rgba(220,220,220,0.75)",
 				highlightStroke: "rgba(220,220,220,1)",
-				data: [0, 20, 30, 40, 45, 35, 42]
+				data: barTotalData
 			},
 			{
-				label: "My Second dataset",
+				label: "My usage this week",
 				fillColor: "rgba(151,187,205,0.5)",
 				strokeColor: "rgba(151,187,205,0.8)",
 				highlightFill: "rgba(151,187,205,0.75)",
 				highlightStroke: "rgba(151,187,205,1)",
-				data: [0, 0, 5, 10, 15, 9, 7]
+				data: barMyData
 			}
 		]};
 		$(document).ready(function() {
