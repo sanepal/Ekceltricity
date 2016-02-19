@@ -16,6 +16,8 @@ exports.create = function(req, res) {
         return;
       }
       var member = db.createOrGetUser(email, email, null);
+
+      console.log(member);
       members.push({'id': member.id, 'appliances': []});
     });
   }

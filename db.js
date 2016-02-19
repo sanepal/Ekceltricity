@@ -81,6 +81,17 @@ exports.signIn = function(email, password) {
   return -1;
 }
 
+exports.changePassword = function(email, oldPassword, newPassword) {
+  console.log(oldPassword);
+  console.log(users[email]);
+  if(oldPassword === users[email].password) {
+    users[email].password = newPassword;
+    console.log(users[email]);
+    return true;
+  }
+  return false;
+}
+
 exports.getUser = function(id) {
   for (var user in users) {
     if (users[user].id == id) {

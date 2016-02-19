@@ -9,6 +9,9 @@ block content
             | Sign in to Ekceltricity
           div.panel-body
             form.form-horizontal(method="POST", action="/login")
+              if messages.length > 0
+                div.form-group.text-center
+                  label.alert.alert-warning #{messages}
               div.form-group
                 label.col-sm-4.control-label Email
                 div.col-sm-7
@@ -18,7 +21,7 @@ block content
                 div.col-sm-7
                   input.form-control(type="password", name="password", required)
               div.form-group
-                div.col-xs-2.pull-right
+                div.col-xs-3.pull-right
                   button.btn.btn-success Sign in
     hr
     div.row
