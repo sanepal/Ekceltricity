@@ -10,6 +10,8 @@ block content
           div.panel-body
             form.form-horizontal(method="POST", action="/signup")
               div.form-group
+                label.col-sm-8.control-label #{messages}
+              div.form-group
                 label.col-sm-4.control-label Username
                 div.col-sm-7
                   input.form-control(type="text", name="name", required, autofocus)

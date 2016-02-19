@@ -6,9 +6,8 @@ exports.viewSignIn = function(req, res) {
 }
 
 exports.viewSignUp = function(req, res) {
-  res.render('sign-up', {
-    'title': 'Ekceltricity'
-  });
+	req.session.messages = [];
+	res.render('sign-up', {'title': 'Ekceltricity'});
 }
 
 exports.viewWelcome = function(req, res) {
@@ -28,7 +27,7 @@ exports.signIn = function(req, res) {
 	} else {
 		req.session.messages = [];
 		req.session.messages.push("Invalid email/password combination");
-		res.redirect('/sign-in');
+		res.redirect('/login');
 	}
 }
 
@@ -43,7 +42,9 @@ exports.signUp = function(req, res) {
 		req.session.email = email;
 		res.redirect('/');
 	} else {
-		//show error message
+		req.session.messages = [];
+		req.session.messages.push("Account already exists");
+		res.redirect('/signup');
 	}
 }
 
