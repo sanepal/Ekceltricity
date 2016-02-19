@@ -11,15 +11,14 @@ exports.init = function() {
     if (households[i].id > max) {
       max = households[i].id;
     }
-    for (var j = 0; j < households[i].members.length; j++) {
-      if (households[i].members[j].id > userMax) {
-        userMax = households[i].members[j].id;
-      }
-    }
   }
   runningHouseholdId = max;
-  runningUserId = userMax;
   max = 0;
+  for (i in users) {
+    if (users[i].id > max) {
+      runningUserId = users[i].id;
+    }
+  }
   for (var i = 0; i < appliances.length; i++) {
     if (appliances[i].id > max) {
       max = appliances[i].id;
@@ -62,16 +61,15 @@ exports.editHousehold = function(data) {
 }
 
 exports.createOrGetUser = function(name, email, password) {
-  var newId = ++runningUserId;
   if (users[email] === undefined) {
+    var newId = ++runningUserId;
     users[email] = {
       'name': name, 
       'id': newId,
       'password': password
-    };
-    return users[email];
+    };    
   }
-  return undefined;
+  return users[email];
 }
 
 exports.signIn = function(email, password) {
