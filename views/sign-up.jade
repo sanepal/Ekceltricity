@@ -1,0 +1,29 @@
+extend ./skeleton.jade
+
+block content
+  div.container
+    div.row
+      div.col-md-6.col-md-offset-3
+        div.panel.panel-default
+          div.panel-heading
+            | Create a new account
+          div.panel-body
+            form.form-horizontal(method="POST", action="/signup")
+              if messages.length > 0
+                div.form-group.text-center
+                  label.alert.alert-warning #{messages}
+              div.form-group
+                label.col-sm-4.control-label Username
+                div.col-sm-7
+                  input.form-control(type="text", name="name", required, autofocus)
+              div.form-group
+                label.col-sm-4.control-label Email
+                div.col-sm-7
+                  input.form-control(type="email", name="email", required)
+              div.form-group
+                label.col-sm-4.control-label Password
+                div.col-sm-7
+                  input.form-control(type="password", name="password", required)
+              div.form-group
+                div.col-xs-4.pull-right
+                  button.btn.btn-success Create an account

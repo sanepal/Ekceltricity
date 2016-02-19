@@ -12,11 +12,12 @@ block content
 					li: a(href="/breakdown/#{household.id}")
 						| #{household.name}
 					li
-						| #{userId == member.id ? 'My Appliances' : member.name + "'s Appliances"}
+						| #{readOnly ? member.name + "'s Appliances" : 'My Appliances'}
 				hr
 				nav
 					ul.nav.nav-tabs(data-tabs="tabs", role="tab-list")
 						li.active(role="presentation"): a(href="#overview", data-toggle="tab") Appliances
+						li(role="presentation"): a(href="#breakdown", data-toggle="tab") Breakdown
 						li(role="presentation"): a(href="#logs", data-toggle="tab") Usage Logs
 				hr
 				div.tab-content
@@ -24,101 +25,100 @@ block content
 						div.col-md-8.col-md-offset-2
 							div.panel.panel-default
 								div.panel-heading
-									| Control your Appliances
+									| #{ readOnly ? "Viewing " + member.name + "'s appliances": 'Control your appliances'}
 								div.panel-body
-									button.btn.btn-success.btn-block#addAppliance(href='#' role='button' style="display:#{appliances.length === 0 ? 'none' : 'block'}")
-										| Add Appliance
-									div#addApplianceDiv(hidden=(appliances.length !== 0))
+									unless readOnly
+										button.btn.btn-success.btn-block#addAppliance(href='#' role='button' style="display:#{appliances.length === 0 ? 'none' : 'block'}")
+											| Add Appliance
+										div#addApplianceDiv(hidden=(appliances.length !== 0))
+											hr
+											form.form-horizontal(method="POST" action='/appliance/add/#{household.id}/')
+												div.form-group
+													label.col-sm-4.control-label Appliance Name
+													div.col-sm-7
+														input.form-control#addApplianceNameInput(type="text", name="name", required)
+												div.form-group
+													label.col-sm-4.control-label Usage Rate
+													div.col-sm-7
+														div.input-group
+															input.form-control#addApplianceUsageRateInput(type="text", name="rate", value="0.1", required)
+															span.input-group-addon kWh
+												div.col-sm-5.col-sm-offset-1
+													a.btn.btn-default.pull-right#cancelAddAppliance
+														| Cancel
+												div.col-sm-5
+													button.btn.btn-success
+														| Add
+										div.clearfix
 										hr
-										form.form-horizontal(method="POST" action='/appliance/add/#{household.id}/')
-											div.form-group
-												label.col-sm-4.control-label Appliance Name
-												div.col-sm-7
-													input.form-control#addApplianceNameInput(type="text", name="name", required)
-											div.form-group
-												label.col-sm-4.control-label Usage Rate
-												div.col-sm-7
-													div.input-group
-														input.form-control#addApplianceUsageRateInput(type="text", name="rate", value="0.1", required)
-														span.input-group-addon kWh
-											div.col-sm-5.col-sm-offset-1
-												a.btn.btn-default.pull-right#cancelAddAppliance(button type='button')
-													| Cancel
-											div.col-sm-5
-												button.btn.btn-success
-													| Add
-									div.clearfix
-									hr
 									if appliances.length !== 0
 										form.form-horizontal
 											for appliance in appliances
 												div.form-group
 													label.col-xs-5.control-label(for='')
-														a(href='/appliance/edit/#{household.id}/#{appliance.id}')
-															| #{appliance.name}&nbsp;
-															span.glyphicon.glyphicon-pencil
+														if readOnly
+															| #{appliance.name}
+														else
+															a(href='/appliance/edit/#{household.id}/#{appliance.id}')
+																| #{appliance.name}&nbsp;
+																span.glyphicon.glyphicon-pencil
 													div.col-xs-7
-														input.form-control.tracking(type='checkbox' data-appliance='#{appliance.id}' checked=(appliance.status == 1))
+														input.form-control.tracking(type='checkbox' data-appliance='#{appliance.id}' checked=(appliance.status == 1) readonly=(readOnly))
 														span.help-block(id='helpBlock')
 															each applianceCostEntry in applianceMonthCosts
 																if applianceCostEntry.applianceName == appliance.name
 																	| $#{applianceCostEntry.cost} this month 
-								if appliances.length !== 0
-									div.panel-footer
-										div.center-block(style='text-align:center')
-											a.toggle-appliance(href='#' data-state='shown')
-												| Hide appliances			
-												span.glyphicon.glyphicon-chevron-up
-						div.clearfix
-						hr
-						h3
-							| Appliance Usage
+									else
+										if readOnly
+											p #{member.name} has not added any appliances, tell them to do so!
+
+					div#breakdown.tab-pane
 						div.col-md-10.col-md-offset-1
+							h3
+								| Appliance Usage
 							if appliances.length === 0
 								p Add some appliances to see a graphical breakdown of your usage.
 							canvas(id='applianceChart' max-height='600' style="display:#{appliances.length === 0 ? 'none' : 'block'}")
 						div.clearfix
 						hr
-						h3
-							| Daily Usage
 						div.col-md-10.col-md-offset-1
+							h3
+								| Daily Usage
 							canvas(id='dailyChart' max-height='600')
 					div#logs.tab-pane
 						div.col-md-10.col-md-offset-1
-							div.panel.panel-default.table-responsive
-								table.table
-									thead
-										th 
-											| Appliance
-											span.glyphicon.glyphicon-sort.pull-right
-										th
-											| Start time
-											span.glyphicon.glyphicon-sort.pull-right
-										th
-											| Endtime
-											span.glyphicon.glyphicon-sort.pull-right
-										th
-									tbody
-										tr
-											td
-												select.form-control
-													each appliance in appliances
-														option #{appliance.name}
-											td: input.form-control(type="datetime-local")
-											td: input.form-control(type="datetime-local")
-											td: button.btn.btn-success
-												| Add
-										each appliance in appliances
-											each usage in appliance.usage												
+							each appliance in appliances
+								div.panel.panel-default.table-responsive
+									div.panel-heading
+										| #{appliance.name}
+										a.pull-right.toggle-logs(data-state="hidden")
+											| View&nbsp;
+											span.glyphicon.glyphicon-chevron-down
+									table.table(style="display:none")
+										thead
+											th
+												| Start time
+											th
+												| Endtime
+											unless readOnly
+												th
+										tbody
+											each usage, index in appliance.usage												
 												tr
-													td #{appliance.name}
 													td
-														input.form-control.usage-times(type="datetime-local" value="#{moment(usage.start).format('YYYY-MM-DDThh:mm:ss')}")
+														if readOnly
+															| #{moment(usage.start).format('MM/DD/YYYY hh:mm:ss')}
+														else 
+															input.form-control.usage-times(type="datetime-local" value="#{moment(usage.start).format('YYYY-MM-DDThh:mm:ss')}")
 													td
-														input.form-control.usage-times(type="datetime-local" value="#{usage.end === undefined ? '' : moment(usage.end).format('YYYY-MM-DDThh:mm:ss')}")
-													td
-														button.btn.btn-primary.disabled.submit-usage(data-appliance="")
-															| Save
+														if readOnly
+															| #{usage.end === undefined ? '' : moment(usage.end).format('MM/DD/YYYY hh:mm:ss')}
+														else 
+															input.form-control.usage-times(type="datetime-local" value="#{usage.end === undefined ? '' : moment(usage.end).format('YYYY-MM-DDThh:mm:ss')}")
+													unless readOnly
+														td
+															button.btn.btn-primary.disabled.submit-usage(data-appliance="#{appliance.id}" data-usage="#{usage.id}" data-index="#{index}")
+																| Save
 
 
 
@@ -141,7 +141,6 @@ block append scripts
 	script(src='/js/Chart.js')
 	script(src='/js/chart-config.js')
 	script(src='/js/bootstrap-switch.min.js')
-	script(src='/js/jquery.tablesorter.min.js')
 	script.
 		var pieData = !{JSON.stringify(pieData)};
 		var labels = !{JSON.stringify(labels)};
@@ -167,30 +166,18 @@ block append scripts
 				data: barMyData
 			}
 		]};
+		var chartsInitialized = false;
 		$(document).ready(function() {
 		  $(".tracking").bootstrapSwitch();
-		  $(".tracking").on('switchChange.bootstrapSwitch', function(evt, state) {
-		  	$.post('/appliance/toggle/' + $(this).data('appliance'));
-		  });
-		  $(".table").tablesorter({ sortList: [[0, 0], [1, 0]] });
+			$(".tracking").on('switchChange.bootstrapSwitch', function(evt, state) {
+				$.post('/appliance/toggle/' + $(this).data('appliance'));
+			});
 		  $(".usage-times").on('change', function(evt) {
 		  	$(this).parents("tr").find(".submit-usage").removeClass('disabled');
 		  });
-		  
-		  $(".toggle-appliance").click(function(evt) {
-				evt.preventDefault();
-				var text = '';
-				var state = $(this).data("state");
-				if (state === "hidden") {
-				  text = 'Hide appliances <span class="glyphicon glyphicon-chevron-up"></span>';
-				  $(this).data("state", "shown");
-				} else {
-				  text = 'Show appliances <span class="glyphicon glyphicon-chevron-down"></span>';
-				  $(this).data("state", "hidden");
-				}
-				$(this).html(text);
-				$(this).parents(".panel").find(".panel-body").slideToggle();
-		  });
+
+		  $(".submit-usage").on('click', saveLog);		  
+		  $(".toggle-logs").on('click', toggleLogs); 
 
 		  $("#addAppliance").on('click', function(evt) {
 		  	evt.preventDefault();
@@ -202,24 +189,38 @@ block append scripts
 		  	evt.preventDefault();
 		  	$("#addApplianceNameInput").val("");
 		  	$("#addApplianceDiv").toggle();
-		  });
+		  });		  
 
-		  // Get context with jQuery - using jQuery's .get() method.
-		  var ctx = $("#applianceChart").get(0).getContext("2d");
-		  // This will get the first returned node in the jQuery collection.
-		  var myNewChart = new Chart(ctx).Pie(pieData, {
-			//String - A legend template
-			legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
-
-		  });
-		  $("#applianceChart").after(myNewChart.generateLegend());
-
-		  // Get context with jQuery - using jQuery's .get() method.
-		  var ctx = $("#dailyChart").get(0).getContext("2d");
-		  // This will get the first returned node in the jQuery collection.
-		  var myNewChart = new Chart(ctx).Bar(barData, {
-			//String - A legend template
-			legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
-
-		  });
+		  $('a[href="#breakdown"]').on('shown.bs.tab', initCharts);
 		});
+
+		function saveLog(evt) {
+			console.log($(this).closest("tr"));
+		}
+
+		function toggleLogs(evt) {
+			evt.preventDefault();
+			var text = '';
+			var state = $(this).data("state");
+			if (state === "hidden") {
+				text = 'Hide <span class="glyphicon glyphicon-chevron-up"></span>';
+				$(this).data("state", "shown");
+			} else {
+				text = 'Show <span class="glyphicon glyphicon-chevron-down"></span>';
+				$(this).data("state", "hidden");
+			}
+			$(this).html(text);
+			$(this).parents(".panel").find(".table").slideToggle();
+		}
+
+		function initCharts(evt) {
+			if (!chartsInitialized) {
+				var ctx = $("#applianceChart").get(0).getContext("2d");		  		
+					var myNewChart = new Chart(ctx).Pie(pieData);
+				$("#applianceChart").after(myNewChart.generateLegend());
+
+				var ctx = $("#dailyChart").get(0).getContext("2d");
+				var myNewChart = new Chart(ctx).Bar(barData);
+				chartsInitialized = true;
+			}
+		}

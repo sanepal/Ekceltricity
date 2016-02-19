@@ -11,15 +11,14 @@ exports.init = function() {
     if (households[i].id > max) {
       max = households[i].id;
     }
-    for (var j = 0; j < households[i].members.length; j++) {
-      if (households[i].members[j].id > userMax) {
-        userMax = households[i].members[j].id;
-      }
-    }
   }
   runningHouseholdId = max;
-  runningUserId = userMax;
   max = 0;
+  for (i in users) {
+    if (users[i].id > max) {
+      runningUserId = users[i].id;
+    }
+  }
   for (var i = 0; i < appliances.length; i++) {
     if (appliances[i].id > max) {
       max = appliances[i].id;
@@ -61,15 +60,36 @@ exports.editHousehold = function(data) {
   households[idx].members = data.members;
 }
 
-exports.createOrGetUser = function(email) {
-  var newId = ++runningUserId;
+exports.createOrGetUser = function(name, email, password) {
   if (users[email] === undefined) {
+    var newId = ++runningUserId;
     users[email] = {
-      'name': email, 
-      'id': newId
-    };
+      'name': name, 
+      'id': newId,
+      'password': password
+    };    
   }
   return users[email];
+}
+
+exports.signIn = function(email, password) {
+  if(users[email] != undefined) {
+    if(users[email].password == password) {
+      return users[email].id;
+    }
+  } 
+  return -1;
+}
+
+exports.changePassword = function(email, oldPassword, newPassword) {
+  console.log(oldPassword);
+  console.log(users[email]);
+  if(oldPassword === users[email].password) {
+    users[email].password = newPassword;
+    console.log(users[email]);
+    return true;
+  }
+  return false;
 }
 
 exports.getUser = function(id) {
@@ -182,7 +202,8 @@ exports.toggle = function(applianceId) {
     appliances[applianceIdx].usage[appliances[applianceIdx].usage.length - 1].end = Date.now();
     appliances[applianceIdx].status = 0;
   } else {
-    appliances[applianceIdx].usage.push({'start': Date.now()});
+    var usageId = appliances[applianceIdx].usage.length;
+    appliances[applianceIdx].usage.push({'id': usageId, 'start': Date.now()});
     appliances[applianceIdx].status = 1;
   }
 }

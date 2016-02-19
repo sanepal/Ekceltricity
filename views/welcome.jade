@@ -1,0 +1,17 @@
+extend ./skeleton.jade
+
+block content
+	link(href="/css/style.css", rel="stylesheet", type="text/css")
+	div.row
+		div.col-md-5.col-md-offset-4
+			h2 Ekceltricity In Your Hands
+			p Friends living together often split everything equally, but it is more fair to pay for what you use.
+				div.container
+					div.row
+						div.col-lg-4.col-lg-offset-1
+							a.btn.btn-primary.btn-lg.btn-block(role="button", href="/login")
+								| Sign In
+			p This app helps individuals and households collect and monitor their energy usage. With our data depiction features, our users can understand which of their appliances use the most energy and they can make informed decisions about changing their usage patterns to conserve or adjust their energy consumption. 
+				a(href="/signup")
+					| Sign Up for free
+

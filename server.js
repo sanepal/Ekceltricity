@@ -16,6 +16,7 @@ var household = require('./routes/household');
 var breakdown = require('./routes/breakdown');
 var settings = require('./routes/settings');
 var appliance = require('./routes/appliance');
+var user = require('./routes/user');
 
 var app = express();
 
@@ -30,8 +31,9 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.cookieParser('Intro HCI secret key'));
 app.use(express.session());
-app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+// Router after static file server
+app.use(app.router);
 
 // Moment!
 app.locals.moment = require('moment');
@@ -42,15 +44,39 @@ if ('development' == app.get('env')) {
 }
 
 var loadUser = function(req, res, next) {
-  req.userId = 2;
-  res.locals.userId = req.userId;
+  res.locals.userId = req.session.userId;
+  res.locals.email = req.session.email;
+  if(req.session.messages) {
+  	res.locals.messages = req.session.messages;
+  } else {
+  	res.locals.messages = [];
+  }
   next();
+}
+
+var authenticate = function(req, res, next) {
+	if(req.session.userId === undefined) {
+		res.redirect('/login');
+	} else {
+		next();
+	}
 }
 
 // Add routes here
 app.all('*', loadUser);
+
+app.get('/welcome', user.viewWelcome);
+app.get('/login', user.viewSignIn);
+app.post('/login', user.signIn);
+
+app.get('/signup', user.viewSignUp);
+app.post('/signup', user.signUp);
 app.get('/', index.view);
+
+app.all('*', authenticate);
+
 app.get('/settings', settings.view);
+app.post('/changePassword', settings.changePassword);
 
 app.get('/create', household.view);
 app.post('/create', household.create);
@@ -67,6 +93,8 @@ app.post('/appliance/toggle/:appliance', appliance.toggle);
 app.post('/appliance/add/:household', appliance.add);
 app.post('/appliance/edit/:householdId/:applianceId', appliance.update);
 app.post('/appliance/delete/:householdId/:applianceId', appliance.delete);
+
+app.get('/logout', user.logout);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

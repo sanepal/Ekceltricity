@@ -24,7 +24,7 @@ block content
               form.form-horizontal
                 unless household.appliances.length == 0
                   h4
-                    a(href="/breakdown/#{household.id}/2")
+                    a(href="/breakdown/#{household.id}/#{userId}")
                       | Control your appliances
                   for appliance in household.appliances
                     div.form-group

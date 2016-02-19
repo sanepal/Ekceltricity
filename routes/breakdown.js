@@ -179,6 +179,7 @@ var getUserUsageData = function(household, memberId) {
 exports.getUserUsageData = getUserUsageData;
 
 exports.viewUser = function(req, res) {
+	var userId = req.session.userId;
     var memberId = req.params.member;
     var householdId = req.params.household;
 
@@ -186,8 +187,11 @@ exports.viewUser = function(req, res) {
     var userUsageData = getUserUsageData(household, memberId);
     
     console.log("Sending memberUsageAmounts: " + JSON.stringify(userUsageData.memberApplianceUsage));
+    console.log("user usageData:\n" + JSON.stringify(userUsageData));
     var weekBreakdown = getWeekUsageBreakdown(household, new Date(Date.now()));
-    var title = household.name + " > " + (memberId == req.userId ? 'My Usage' : member.name + "'s Usage");
+    var readOnly = memberId != userId;
+    console.log(readOnly);
+    var title = household.name + " > " + (readOnly ? userUsageData.member.name + "'s Usage" : 'My Usage');
     res.render('my-overview', {
     			'title': title, 
     			'household': household, 
@@ -195,5 +199,6 @@ exports.viewUser = function(req, res) {
     			'appliances': userUsageData.appliances, 
     			'memberApplianceUsage':userUsageData.memberApplianceUsage, 
     			'weekBreakdown':weekBreakdown,
-    			'applianceMonthCosts':userUsageData.applianceMonthCosts});
+    			'applianceMonthCosts':userUsageData.applianceMonthCosts,
+    			'readOnly':readOnly});
 }

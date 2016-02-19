@@ -1,18 +1,22 @@
 {
   "sn@uc":{
     "id": 0,
-    "name": "Sabit"
+    "name": "Sabit",
+    "password" : "123" 
   },
   "rs@uc":{
     "id": 1,
-    "name": "Rahul"
+    "name": "Rahul",
+    "password" : "123" 
   },
-  "dt@uc":{
+  "dqthai@ucsd.edu":{
     "id": 2,
-    "name": "Dan"
+    "name": "Dan",
+    "password" : "123" 
   },
   "yy@uc":{    
     "id": 3,
-    "name": "Yaswan"
+    "name": "Yaswan",
+    "password" : "123" 
   }
 }

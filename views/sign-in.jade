@@ -1,0 +1,33 @@
+extend ./skeleton.jade
+
+block content
+  div.container
+    div.row
+      div.col-md-6.col-md-offset-3
+        div.panel.panel-default
+          div.panel-heading
+            | Sign in to Ekceltricity
+          div.panel-body
+            form.form-horizontal(method="POST", action="/login")
+              if messages.length > 0
+                div.form-group.text-center
+                  label.alert.alert-warning #{messages}
+              div.form-group
+                label.col-sm-4.control-label Email
+                div.col-sm-7
+                  input.form-control(type="email", name="email", required, autofocus)
+              div.form-group
+                label.col-sm-4.control-label Password
+                div.col-sm-7
+                  input.form-control(type="password", name="password", required)
+              div.form-group
+                div.col-xs-3.pull-right
+                  button.btn.btn-success Sign in
+    hr
+    div.row
+      div.col-md-4.col-md-offset-4
+        div.panel.panel-default
+          div.panel-body.text-center
+            p New to Ekceltricity? 
+              a(href="/signup")
+                  | Create a new account
