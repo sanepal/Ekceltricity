@@ -17,6 +17,7 @@ block content
 				nav
 					ul.nav.nav-tabs(data-tabs="tabs", role="tab-list")
 						li.active(role="presentation"): a(href="#overview", data-toggle="tab") Appliances
+						li(role="presentation"): a(href="#breakdown", data-toggle="tab") Breakdown
 						li(role="presentation"): a(href="#logs", data-toggle="tab") Usage Logs
 				hr
 				div.tab-content
@@ -65,25 +66,22 @@ block content
 														input.form-control.tracking(type='checkbox' data-appliance='#{appliance.id}' checked=(appliance.status == 1) readonly=(readOnly))
 														span.help-block(id='helpBlock')
 															| $10.10 this month
-								if appliances.length !== 0
-									div.panel-footer
-										div.center-block(style='text-align:center')
-											a.toggle-appliance(href='#' data-state='shown')
-												| Hide appliances			
-												span.glyphicon.glyphicon-chevron-up
-						div.clearfix
-						hr
-						h3
-							| Appliance Usage
+									else
+										if readOnly
+											p #{member.name} has not added any appliances, tell them to do so!
+
+					div#breakdown.tab-pane
 						div.col-md-10.col-md-offset-1
+							h3
+								| Appliance Usage
 							if appliances.length === 0
 								p Add some appliances to see a graphical breakdown of your usage.
 							canvas(id='applianceChart' max-height='600' style="display:#{appliances.length === 0 ? 'none' : 'block'}")
 						div.clearfix
 						hr
-						h3
-							| Daily Usage
 						div.col-md-10.col-md-offset-1
+							h3
+								| Daily Usage
 							canvas(id='dailyChart' max-height='600')
 					div#logs.tab-pane
 						div.col-md-10.col-md-offset-1
@@ -137,7 +135,6 @@ block append scripts
 	script(src='/js/jquery.tablesorter.min.js')
 	script.
 		var pieData = !{JSON.stringify(pieData)};
-
 		var barData = {
 		labels: ["1/1", "1/2", "1/3", "1/4", "1/5", "1/6", "1/7"],
 		datasets: [
@@ -158,6 +155,7 @@ block append scripts
 				data: [0, 0, 5, 10, 15, 9, 7]
 			}
 		]};
+		var chartsInitialized = false;
 		$(document).ready(function() {
 		  $(".tracking").bootstrapSwitch();
 			$(".tracking").on('switchChange.bootstrapSwitch', function(evt, state) {
@@ -193,24 +191,17 @@ block append scripts
 		  	evt.preventDefault();
 		  	$("#addApplianceNameInput").val("");
 		  	$("#addApplianceDiv").toggle();
-		  });
+		  });		  
 
-		  // Get context with jQuery - using jQuery's .get() method.
-		  var ctx = $("#applianceChart").get(0).getContext("2d");
-		  // This will get the first returned node in the jQuery collection.
-		  var myNewChart = new Chart(ctx).Pie(pieData, {
-			//String - A legend template
-			legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+		  $('a[href="#breakdown"]').on('shown.bs.tab', function(e) {
+		  	if (!chartsInitialized) {
+		  		var ctx = $("#applianceChart").get(0).getContext("2d");		  		
+			   	var myNewChart = new Chart(ctx).Pie(pieData);
+			  	$("#applianceChart").after(myNewChart.generateLegend());
 
-		  });
-		  $("#applianceChart").after(myNewChart.generateLegend());
-
-		  // Get context with jQuery - using jQuery's .get() method.
-		  var ctx = $("#dailyChart").get(0).getContext("2d");
-		  // This will get the first returned node in the jQuery collection.
-		  var myNewChart = new Chart(ctx).Bar(barData, {
-			//String - A legend template
-			legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
-
-		  });
+			  	var ctx = $("#dailyChart").get(0).getContext("2d");
+			  	var myNewChart = new Chart(ctx).Bar(barData);
+			  	chartsInitialized = true;
+		  	}
+			});
 		});
