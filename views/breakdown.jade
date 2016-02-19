@@ -37,7 +37,9 @@ block content
 				div.col-md-10.col-md-offset-1
 					h3
 						| Breakdown
-					canvas(id='pie-chart' max-height='600')
+					if totalMonthUsage.totalUsage == 0
+						p Toggle your apliances to see a graphical breakdown of your household's electricity usage.
+					canvas(id='pie-chart' max-height='600' style="display:#{totalMonthUsage.totalUsage === 0 ? 'none' : 'block'}")
 				div.clearfix
 				hr
 				div.col-md-10.col-md-offset-1
@@ -49,8 +51,9 @@ block append scripts
 	- var colors = ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"];
 	- var highlights = ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5"];
 	- var pieData = [];
-	each member, index in totalMonthUsage.memberBreakdown
-		- pieData.push({'value': member.usage, 'label': member.name, 'color': colors[index % 4], 'highlight': highlights[index % 4]});
+	if totalMonthUsage.totalUsage != 0
+		each member, index in totalMonthUsage.memberBreakdown
+			- pieData.push({'value': member.usage, 'label': member.name, 'color': colors[index % 4], 'highlight': highlights[index % 4]});
 	- var now = new Date(Date.now());
 	- var labels = [];
 	- var barData = [0, 0, 0, 0, 0, 0, 0];
