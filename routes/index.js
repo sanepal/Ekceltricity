@@ -14,14 +14,14 @@ exports.view = function(req, res) {
           h.appliances.push(db.getAppliance(a));
         });
         userHouseholds.push(h);
-        console.log("h id: " + h.id + ", " + req.userId);
+        console.log("h id: " + h.id + ", " + userId);
         var memberUsageData = breakdown.getUserUsageData(h, userId);
         console.log("applianceCosts: " + JSON.stringify(memberUsageData.applianceMonthCosts));
         applianceBreakdowns.push({'householdName':h.name, 'applianceCosts': memberUsageData.applianceMonthCosts});
       }
     });
   });
-  if (res.locals.userId) {
+  if (res.locals.userId > -1) {
     res.render('index', {
       'title': 'Ekceltricity',
       'households': userHouseholds,
