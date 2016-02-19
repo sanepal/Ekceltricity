@@ -10,7 +10,7 @@ exports.create = function(req, res) {
   var members = [];
 
   // Create new users or find the existing ones
-  if (household.members.length !== 0) {
+  if (household.members !== undefined && household.members.length !== 0) {
     household.members.forEach(function(email) {
       if (email === '') {
         return;

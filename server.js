@@ -56,7 +56,7 @@ var loadUser = function(req, res, next) {
 
 var authenticate = function(req, res, next) {
 	if(req.session.userId === undefined) {
-		res.redirect('/login');
+		res.redirect('/welcome');
 	} else {
 		next();
 	}
@@ -71,9 +71,10 @@ app.post('/login', user.signIn);
 
 app.get('/signup', user.viewSignUp);
 app.post('/signup', user.signUp);
-app.get('/', index.view);
 
 app.all('*', authenticate);
+
+app.get('/', index.view);
 
 app.get('/settings', settings.view);
 app.post('/changePassword', settings.changePassword);
