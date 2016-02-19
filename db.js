@@ -164,7 +164,6 @@ exports.deleteAppliance = function(householdId, applianceId) {
       break;
     }
   }
-  console.log("householdIdx: " + householdIdx + ", memberIdx: " + memberIdx + ", applianceIdx: " + applianceIdx);
   if (householdIdx != -1 && memberIdx != -1 && applianceIdx != -1) {
       households[householdIdx].members[memberIdx].appliances.splice(applianceIdx, 1);
   }

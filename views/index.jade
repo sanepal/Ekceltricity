@@ -32,7 +32,11 @@ block content
                       div.col-xs-7
                         input.form-control.tracking(type="checkbox", data-appliance="#{appliance.id}", checked=(appliance.status == 1))
                         span.help-block 
-                          | $5.14 this month
+                          each applianceBreakdown in applianceBreakdowns
+                            if applianceBreakdown.householdName == household.name
+                              each applianceCostEntry in applianceBreakdown.applianceCosts
+                                if applianceCostEntry.applianceName == appliance.name
+                                  | $#{applianceCostEntry.cost} this month 
                 else
                   h4
                     a(href="/breakdown/#{household.id}/#{userId}")
