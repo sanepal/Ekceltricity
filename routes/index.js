@@ -21,13 +21,9 @@ exports.view = function(req, res) {
       }
     });
   });
-  if (res.locals.userId) {
-    res.render('index', {
-      'title': 'Ekceltricity',
-      'households': userHouseholds,
-      'applianceBreakdowns': applianceBreakdowns
-    });
-  } else {
-    res.redirect('/welcome');
-  }
+  res.render('index', {
+    'title': 'Ekceltricity',
+    'households': userHouseholds,
+    'applianceBreakdowns': applianceBreakdowns
+  });
 }
