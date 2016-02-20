@@ -73,6 +73,7 @@ block append scripts
 			labels : barLabels,
 			datasets : [
 				{
+					label: "Usage",
 					fillColor : "rgba(120,220,220,0.5)",
 					strokeColor : "rgba(120,220,220,0.8)",
 					highlightFill: "rgba(120,220,220,0.75)",
@@ -87,6 +88,7 @@ block append scripts
 			$("#pie-chart").after(window.myPie.generateLegend());
 			ctx = document.getElementById("bar-chart").getContext("2d");
 			window.myBar = new Chart(ctx).Bar(barChartData, null);
+			$("#bar-chart").after(window.myBar.generateLegend());
 		}
 
 
