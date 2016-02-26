@@ -16,6 +16,10 @@ exports.viewWelcome = function(req, res) {
   });
 }
 
+exports.viewWelcome2 = function(req, res) {
+	res.render('welcome2', {'title': 'Ekceltricity'});
+}
+
 exports.signIn = function(req, res) {
 	var email = req.body.email;
 	var password = req.body.password;

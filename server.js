@@ -66,6 +66,7 @@ var authenticate = function(req, res, next) {
 app.all('*', loadUser);
 
 app.get('/welcome', user.viewWelcome);
+app.get('/welcome2', user.viewWelcome2);
 app.get('/login', user.viewSignIn);
 app.post('/login', user.signIn);
 

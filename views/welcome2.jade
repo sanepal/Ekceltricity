@@ -1,0 +1,66 @@
+doctype html
+html
+    include ./includes/head.jade
+    body
+        div.jumbotron(style="background-image: linear-gradient(120deg, #155799, #159957);")
+            div.container.text-center
+                h1(style="color:white")
+                    | Ekceltricity
+                h3(style="color:white;opacity:0.7")
+                    | Analytics for your electricity
+                p
+                    a#learnMore.btn.btn-default.btn-lg(style="background-color: rgba(255, 255, 255, 0.08); color:white; margin:1em 0.5em 0 0em") Learn More
+                    a.btn.btn-default.btn-lg(href="/login" style="background-color: rgba(255, 255, 255, 0.08); color:white; margin:1em 0em 0 0.5em") Sign In
+        div#info.container
+            div.row
+                div.col-sm-6.col-sm-offset-3
+                    h3.text-center Ekceltricity lets you track your electricity usage and identify which of your appliances cost you the most money.
+                div.col-sm-2.col-sm-offset-5
+                    hr
+                div.clearfix
+                div.col-sm-6.col-md-4
+                    div.thumbnail(style="border:none")
+                        img.img-responsive(src="/images/graph-icon.png" style="max-height:128px")
+                        div.caption.text-center
+                            h3 Detailed Analysis
+                            p Our detailed graphs and charts continuously compares your electricity usage throughout the week
+                div.col-sm-6.col-md-4
+                    div.thumbnail(style="border:none")
+                        img.img-responsive(src="/images/seo-report.png" style="max-height:128px")
+                        div.caption.text-center
+                            h3 Identify Trends
+                            p Our appliance usage logs and charts help you visualize when you use your appliances and how much they're costing you
+                div.col-sm-6.col-md-4
+                    div.thumbnail(style="border:none")
+                        img.img-responsive(src="/images/round-pie-chart.png" style="max-height:128px")
+                        div.caption.text-center
+                            h3 Fair Split
+                            p Create a household and encourage your roommates to track their own usage, to split the electricity bill evenly
+                div.col-sm-4.col-sm-offset-4
+                    a.btn.btn-block.btn-lg.btn-success(href="/signup") Click Here to Get Started
+    
+    hr
+    div.container
+      div.row
+        div.col-ms-12.text-center(style="color:#888")
+          p Copyright (C) 2016 Ekceltricity
+          p
+            | Icons made by&nbsp;
+            a(href="http://www.freepik.com" title="Freepik")
+                | Freepik&nbsp;
+            | from&nbsp;
+            a(href="http://www.flaticon.com" title="Flaticon")
+                | www.flaticon.com&nbsp;
+            | is licensed by&nbsp;
+            a(href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank")
+                |CC 3.0 BY
+    include ./includes/scripts.jade
+    script.
+        $(document).ready(function() {
+            $("#learnMore").on('click', function(e) {
+                e.preventDefault();
+                $("html, body").animate({
+                    scrollTop: $("#info").offset().top
+                }, 500);
+            });
+        });
