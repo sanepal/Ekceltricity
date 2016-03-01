@@ -86,6 +86,8 @@ app.post('/create', household.create);
 // Ugh should've done /household maybe
 app.get('/breakdown/:household', breakdown.view);
 app.get('/breakdown/:household/:member', breakdown.viewUser);
+app.get('/stats/:household', breakdown.getHouseholdStats);
+app.get('/stats/:household/:member', breakdown.getMemberStats);
 
 app.get('/household/options/:household', household.viewOptions);
 app.post('/household/options', household.update);
