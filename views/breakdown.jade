@@ -57,6 +57,7 @@ block append scripts
 	- var now = new Date(Date.now());
 	- var labels = [];
 	- var barData = [0, 0, 0, 0, 0, 0, 0];
+	- var householdId = household.id;
 	each day, i in weekBreakdown
 		- labels.push(((now.getMonth() + 1) % 12) + "/" + (now.getDate() - 6 + i));
 		each member, j in day
@@ -64,8 +65,7 @@ block append scripts
 	script(src='/js/Chart.js')
 	script(src='/js/chart-config.js')
 	script.
-		var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
-		
+		var householdId = !{householdId};
 		var pieData = !{JSON.stringify(pieData)};
 		var barLabels = !{JSON.stringify(labels)};
 		var barChartData = !{JSON.stringify(barData)};
@@ -89,6 +89,44 @@ block append scripts
 			ctx = document.getElementById("bar-chart").getContext("2d");
 			window.myBar = new Chart(ctx).Bar(barChartData, null);
 			$("#bar-chart").after(window.myBar.generateLegend());
+		}
+		$(document).ready(function() {
+			setInterval(function() {
+		  	$.get("/stats/" + householdId, updateDisplay);
+		  }, 3000);
+		});
+
+		function updateDisplay(result) {
+			// update pie chart with new data
+			var newPieData = [];
+			for (var i = 0; i < result.householdBreakdown.memberBreakdown.length; i++) {
+				var member = result.householdBreakdown.memberBreakdown[i];
+				for (var j = 0; j < window.myPie.segments.length; j++) {
+					if (window.myPie.segments[j].label == member.name) {
+						window.myPie.segments[j].value = member.usage;
+						break;
+					}
+				}
+			}
+			window.myPie.update();
+
+			// update bar chart with new data
+			var newBarLabels = [];
+			var now = new Date(Date.now());
+			var newBarData = [0, 0, 0, 0, 0, 0, 0];
+			for (var i = 0; i < result.weekBreakdown.length; i++) {
+				newBarLabels.push(((now.getMonth() + 1) % 12) + "/" + (now.getDate() - 6 + i));
+				for (var j = 0; j < result.weekBreakdown[i].length; j++) {
+					newBarData[i] += result.weekBreakdown[i][j].usage;
+				}
+			}
+			for (var i = 0; i < newBarData.length; i++) {
+				window.myBar.datasets[0].bars[i].value = newBarData[i];
+				if (window.myBar.scale.xLabels[6] != newBarLabels[6]) {
+					window.myBar.scale.xLabels[i] = newBarLabels[i];
+				}
+			}
+			window.myBar.update();
 		}
 
 

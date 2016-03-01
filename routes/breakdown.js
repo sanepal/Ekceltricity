@@ -202,3 +202,20 @@ exports.viewUser = function(req, res) {
     			'applianceMonthCosts':userUsageData.applianceMonthCosts,
     			'readOnly':readOnly});
 }
+
+exports.getHouseholdStats = function(req, res) {
+    var household = db.getHousehold(req.params.household);
+    res.json({
+        'householdBreakdown':getTotalUsageThisMonth(household),
+        'weekBreakdown':getWeekUsageBreakdown(household, new Date(Date.now()))
+    });
+}
+
+exports.getMemberStats = function(req, res) {
+    var household = db.getHousehold(req.params.household);
+    var memberId = req.params.member;
+    res.json({
+        'userUsageData':getUserUsageData(household, memberId),
+        'weekBreakdown':getWeekUsageBreakdown(household, new Date(Date.now()))
+    });
+}

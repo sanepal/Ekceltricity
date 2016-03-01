@@ -130,6 +130,9 @@ block append scripts
 	- var labels = [];
 	- var barTotalData = [0, 0, 0, 0, 0, 0, 0];
 	- var barMyData = [0, 0, 0, 0, 0, 0, 0];
+	- var myName = member.name;
+	- var householdId = household.id;
+	- var memberId = member.id;
 	each usage, index in memberApplianceUsage
 		- pieData.push({'value':usage.totalUsage, 'label':usage.applianceName, 'color':colors[index % 4], 'highlight':highlights[index % 4]});
 	each day, i in weekBreakdown
@@ -142,6 +145,9 @@ block append scripts
 	script(src='/js/chart-config.js')
 	script(src='/js/bootstrap-switch.min.js')
 	script.
+		var myName = !{JSON.stringify(myName)};
+		var memberId = !{memberId};
+		var householdId = !{householdId};
 		var pieData = !{JSON.stringify(pieData)};
 		var labels = !{JSON.stringify(labels)};
 		var barTotalData = !{JSON.stringify(barTotalData)};
@@ -216,12 +222,54 @@ block append scripts
 		function initCharts(evt) {
 			if (!chartsInitialized) {
 				var ctx = $("#applianceChart").get(0).getContext("2d");		  		
-					var myNewChart = new Chart(ctx).Pie(pieData);
-				$("#applianceChart").after(myNewChart.generateLegend());
+				window.myPie = new Chart(ctx).Pie(pieData);
+				$("#applianceChart").after(window.myPie.generateLegend());
 
 				var ctx = $("#dailyChart").get(0).getContext("2d");
-				var myNewChart = new Chart(ctx).Bar(barData);
-				$("#dailyChart").after(myNewChart.generateLegend());
+				window.myBar = new Chart(ctx).Bar(barData);
+				$("#dailyChart").after(window.myBar.generateLegend());
 				chartsInitialized = true;
+				setInterval(function() {
+		  		$.get("/stats/" + householdId + "/" + memberId, updateDisplay);
+		  	}, 3000);
 			}
+		}
+
+		function updateDisplay(result) {
+			console.log("updateDisplay called with result " + JSON.stringify(result));
+			// update pie chart with new data
+			var newPieData = [];
+			for (var i = 0; i < result.userUsageData.memberApplianceUsage.length; i++) {
+				var applianceTuple = result.userUsageData.memberApplianceUsage[i];
+				for (var j = 0; j < window.myPie.segments.length; j++) {
+					if (window.myPie.segments[j].label == applianceTuple.applianceName) {
+						window.myPie.segments[j].value = applianceTuple.totalUsage;
+						break;
+					}
+				}
+			}
+			window.myPie.update();
+
+			// update bar chart with new data
+			var newBarLabels = [];
+			var now = new Date(Date.now());
+			var newBarTotalData = [0, 0, 0, 0, 0, 0, 0];
+			var newBarMyData = [0, 0, 0, 0, 0, 0, 0];
+			for (var i = 0; i < result.weekBreakdown.length; i++) {
+				newBarLabels.push(((now.getMonth() + 1) % 12) + "/" + (now.getDate() - 6 + i));
+				for (var j = 0; j < result.weekBreakdown[i].length; j++) {
+					newBarTotalData[i] += result.weekBreakdown[i][j].usage;
+					if (result.weekBreakdown[i][j].name == myName) {
+						newBarMyData[i] += result.weekBreakdown[i][j].usage;
+					}
+				}
+			}
+			for (var i = 0; i < newBarTotalData.length; i++) {
+				window.myBar.datasets[0].bars[i].value = newBarTotalData[i];
+				window.myBar.datasets[1].bars[i].value = newBarMyData[i];
+				if (window.myBar.scale.xLabels[6] != newBarLabels[6]) {
+					window.myBar.scale.xLabels[i] = newBarLabels[i];
+				}
+			}
+			window.myBar.update();
 		}
