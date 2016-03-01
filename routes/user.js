@@ -16,8 +16,12 @@ exports.viewWelcome = function(req, res) {
   });
 }
 
-exports.viewWelcome2 = function(req, res) {
-	res.render('welcome2', {'title': 'Ekceltricity'});
+exports.viewWelcomeA = function(req, res) {
+	res.render('welcome2', {'title': 'Ekceltricity', 'AB': 0});
+}
+
+exports.viewWelcomeB = function(req, res) {
+	res.render('welcome2', {'title': 'Ekceltricity', 'AB': 1});
 }
 
 exports.signIn = function(req, res) {
