@@ -1,16 +1,53 @@
 doctype html
 html
     include ./includes/head.jade
+    if AB == 0
+        head
+            script.
+                function utmx_section(){}function utmx(){}(function(){var
+                k='117683209-0',d=document,l=d.location,c=d.cookie;
+                if(l.search.indexOf('utm_expid='+k)>0)return;
+                function f(n){if(c){var i=c.indexOf(n+'=');if(i>-1){var j=c.
+                indexOf(';',i);return escape(c.substring(i+n.length+1,j<0?c.
+                length:j))}}}var x=f('__utmx'),xx=f('__utmxx'),h=l.hash;d.write(
+                '<sc'+'ript src="'+'http'+(l.protocol=='https:'?'s://ssl':
+                '://www')+'.google-analytics.com/ga_exp.js?'+'utmxkey='+k+
+                '&utmx='+(x?x:'')+'&utmxx='+(xx?xx:'')+'&utmxtime='+new Date().
+                valueOf()+(h?'&utmxhash='+escape(h.substr(1)):'')+
+                '" type="text/javascript" charset="utf-8"><\/sc'+'ript>')})();
+                </script><script>utmx('url','A/B');
     body
-        div.jumbotron(style="background-image: linear-gradient(120deg, #155799, #159957);")
-            div.container.text-center
+        nav.navbar.navbar-default.navbar-static-top(style="position:absolute;width:100%;background-color:rgba(0,0,0,0);border:none")
+            div.container
+                div.navbar-header
+                    button.navbar-toggle.collapsed(data-toggle="collapse", data-target="#navbar", aria-expanded="false", aria-controls="navbar", style="background-color:rgba(0,0,0,0); ")
+                        span.sr-only
+                          | Toggle navigation
+                        span.icon-bar(style="background-color:white")
+                        span.icon-bar(style="background-color:white")
+                        span.icon-bar(style="background-color:white")
+            
+                div#navbar.navbar-collapse.collapse(style="border:none")
+                    ul.nav.navbar-nav.navbar-right
+                        li
+                            a(href="/signup" style="color:white" onclick="gaSendEvent('signup', 'hamburger')")
+                                | Sign Up 
+                        li
+                            a(href="/login" style="color:white" onclick="gaSendEvent('login', 'hamburger')")
+                                | Log In              
+
+        div.jumbotron(style="background-image:linear-gradient(120deg, #155799, #159957);height:100vh")
+            div.container.text-center(style="position: relative;top: 40%;transform: translateY(-40%);")
                 h1(style="color:white")
                     | Ekceltricity
                 h3(style="color:white;opacity:0.7")
                     | Analytics for your electricity
                 p
-                    a#learnMore.btn.btn-default.btn-lg(style="background-color: rgba(255, 255, 255, 0.08); color:white; margin:1em 0.5em 0 0em") Learn More
-                    a.btn.btn-default.btn-lg(href="/login" style="background-color: rgba(255, 255, 255, 0.08); color:white; margin:1em 0em 0 0.5em") Sign In
+                    if AB == 0
+                        a.btn.btn-default.btn-lg(href="/signup" style="background-color: rgba(255, 255, 255, 0.08); color:white; margin:1em 0.5em 0 0em" onclick="gaSendEvent('signup', 'jumbo')") Sign Up
+                    else
+                        a#learnMore.btn.btn-default.btn-lg(style="background-color: rgba(255, 255, 255, 0.08); color:white; margin:1em 0.5em 0 0em" onclick="gaSendEvent('learn-more', 'jumbo')") Learn More
+                    a.btn.btn-default.btn-lg(href="/login" style="background-color: rgba(255, 255, 255, 0.08); color:white; margin:1em 0em 0 0.5em" onclick="gaSendEvent('login', 'jumbo')") Log In
         div#info.container
             div.row
                 div.col-sm-6.col-sm-offset-3
@@ -37,8 +74,7 @@ html
                             h3 Fair Split
                             p Create a household and encourage your roommates to track their own usage, to split the electricity bill evenly
                 div.col-sm-4.col-sm-offset-4
-                    a.btn.btn-block.btn-lg.btn-success(href="/signup") Click Here to Get Started
-    
+                    a.btn.btn-block.btn-lg.btn-success(href="/signup" onclick="gaSendEvent('signup', 'get-started')") Click Here to Get Started
     hr
     div.container
       div.row
@@ -64,3 +100,6 @@ html
                 }, 500);
             });
         });
+        function gaSendEvent(category, label) {
+            ga("send", "event", category, 'click', label);
+        }
