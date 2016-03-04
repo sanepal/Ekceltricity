@@ -29,11 +29,11 @@ block content
 									button.btn.btn-danger.pull-right(onclick="removeMemberFromHousehold(this)", tabindex="-1", type="button")
 										span.glyphicon.glyphicon-remove
 						span.help-block
-							| Add extra household members using their email address.
+							| Add extra household members using their <strong>email address</strong>.
 						div#members
 							for i in [0]
 								div.form-group.input-group
-									input.form-control(type="email", name="newMembers[]")
+									input.form-control(type="email" placeholder='example@example.com' name="newMembers[]")
 							div.form-group
 								button#moreMembers.btn.btn-primary.btn-block(type="button") Add more members
 						div.col-xs-4
@@ -48,7 +48,7 @@ block append scripts
 				evt.preventDefault();
 				$("#members .input-group:last").after(
 					"<div class='form-group input-group'>"
-					+ "<input type='email' name='newMembers[]' class='form-control'>"
+					+ "<input type='email' placeholder='example@example.com' name='newMembers[]' class='form-control'>"
 				);
 			});
 		})
