@@ -28,7 +28,7 @@ block content
             div.col-sm-7.col-sm-offset-2
               for i in [0, 1, 2]
                 div.form-group.input-group
-                  input.form-control(type="email", name="members[]")
+                  input.form-control(type="email", placeholder="example@example.com" name="members[]")
                   span.input-group-btn
                     button.btn.btn-danger(onclick="removeMember(this)", tabindex="-1")
                       span.glyphicon.glyphicon-remove
@@ -46,7 +46,7 @@ block append scripts
         evt.preventDefault();
         $("#members .input-group:last").after(
           "<div class='form-group input-group'>"
-          + "<input type='email' name='members[]' class='form-control'>"
+          + "<input type='email' placeholder='example@example.com' name='members[]' class='form-control'>"
           + "<span class='input-group-btn'><button class='btn btn-danger' onclick='removeMember(this)' tabindex='-1'>"
           + "<span class='glyphicon glyphicon-remove'></span></button></span></div>"
         );
