@@ -42,7 +42,30 @@ block content
 													div.col-sm-7
 														div.input-group
 															input.form-control#addApplianceUsageRateInput(type="text", name="rate", value="0.1", required)
-															span.input-group-addon kWh
+															span.input-group-addon kW/h
+														span.help-block
+															a#commonKwh() Click to see kW/h of common items
+														div#commonKwhTable.hide
+															table.table
+																thead
+																	th Item
+																	th kW/h
+																tbody
+																	tr
+																		td Laptop
+																		td 0.025
+																	tr
+																		td Desktop PC
+																		td 0.075
+																	tr
+																		td Monitor
+																		td 0.042
+																	tr
+																		td TV (40")
+																		td 0.086
+															p To view more estimates, visit&nbsp;
+																a(href="//energy.gov/energysaver/estimating-appliance-and-home-electronic-energy-use") energy.gov.
+															p You can also find the exact input wattage for your appliance from its label and divide it by 1,000 to convert to kilowatts (kW).
 												div.col-sm-5.col-sm-offset-1
 													a.btn.btn-default.pull-right#cancelAddAppliance
 														| Cancel
@@ -198,6 +221,11 @@ block append scripts
 		  });		  
 
 		  $('a[href="#breakdown"]').on('shown.bs.tab', initCharts);
+		  $('#commonKwh').on('click', function(evt) {
+		  	evt.preventDefault();
+		  	$('#commonKwhTable').toggleClass('hide');
+		  	$('#commonKwh').text($('#commonKwhTable').hasClass('hide') ? "Click to see kW/h of common items" : "Hide table");
+		  });
 		});
 
 		function saveLog(evt) {
