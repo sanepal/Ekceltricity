@@ -27,6 +27,8 @@ block content
 								dd $#{totalMonthUsage.totalCost}, #{totalMonthUsage.totalUsage} kW/h
 							if totalMonthUsage.mostMemberName !== undefined
 								p.bg-primary(style='padding:15px') #{totalMonthUsage.mostMemberName}'s #{totalMonthUsage.mostApplianceName} has the highest usage so far with #{totalMonthUsage.mostApplianceAmount} kW/h ($#{totalMonthUsage.mostApplianceCost})!!
+						h4
+							| Member Usages
 						ul.list-group
 							for member in members
 								a.list-group-item(href='/breakdown/#{household.id}/#{member.id}' style='padding-left:1em') 
