@@ -56,7 +56,7 @@ var loadUser = function(req, res, next) {
 
 var authenticate = function(req, res, next) {
 	if(req.session.userId === undefined) {
-		res.redirect('/welcomeA');
+		res.redirect('/welcome');
 	} else {
 		next();
 	}
@@ -66,8 +66,6 @@ var authenticate = function(req, res, next) {
 app.all('*', loadUser);
 
 app.get('/welcome', user.viewWelcome);
-app.get('/welcomeA', user.viewWelcomeA);
-app.get('/welcomeB', user.viewWelcomeB);
 app.get('/login', user.viewSignIn);
 app.post('/login', user.signIn);
 
