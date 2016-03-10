@@ -11,17 +11,7 @@ exports.viewSignUp = function(req, res) {
 }
 
 exports.viewWelcome = function(req, res) {
-  res.render('welcome', {
-    'title': 'Ekceltricity'
-  });
-}
-
-exports.viewWelcomeA = function(req, res) {
-	res.render('welcome2', {'title': 'Ekceltricity', 'AB': 0});
-}
-
-exports.viewWelcomeB = function(req, res) {
-	res.render('welcome2', {'title': 'Ekceltricity', 'AB': 1});
+	res.render('welcome', {'title': 'Ekceltricity'});
 }
 
 exports.signIn = function(req, res) {
