@@ -130,14 +130,14 @@ block content
 												tr
 													td
 														if readOnly
-															| #{moment(usage.start).format('MM/DD/YYYY hh:mm:ss')}
+															| #{moment(usage.start).format('MM/DD/YYYY hh:mm:ss a')}
 														else 
-															input.form-control.usage-times(type="datetime-local" value="#{moment(usage.start).format('YYYY-MM-DDThh:mm:ss')}")
+															input.form-control.usage-times(type="datetime-local" value="#{moment(usage.start).format('YYYY-MM-DDTHH:mm:ss')}")
 													td
 														if readOnly
-															| #{usage.end === undefined ? '' : moment(usage.end).format('MM/DD/YYYY hh:mm:ss')}
+															| #{usage.end === undefined ? '' : moment(usage.end).format('MM/DD/YYYY hh:mm:ss a')}
 														else 
-															input.form-control.usage-times(type="datetime-local" value="#{usage.end === undefined ? '' : moment(usage.end).format('YYYY-MM-DDThh:mm:ss')}")
+															input.form-control.usage-times(type="datetime-local" value="#{usage.end === undefined ? '' : moment(usage.end).format('YYYY-MM-DDTHH:mm:ss')}")
 													unless readOnly
 														td
 															button.btn.btn-primary.disabled.submit-usage(data-appliance="#{appliance.id}" data-usage="#{usage.id}" data-index="#{index}")
