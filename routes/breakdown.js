@@ -13,7 +13,7 @@ function getUsageMillis(startDate, endDate, now) {
     }
     // if it was started in another month and rolled over to this month, use the start of this month
     if (startDate.getMonth() != endDate.getMonth() && endDate.getMonth() == now.getMonth()) {
-        startDate = new Date(now.getYear(), now.getMonth(), 1);
+        startDate = new Date(1900 + now.getYear(), now.getMonth(), 1);
     }
     return endDate.getTime() - startDate.getTime();
 }
@@ -76,6 +76,7 @@ function getTotalUsageThisMonth(household) {
 	Used in the member's overview page for more accurate statistics, and also in the daily usage graph in Household.
 */
 function getWeekUsageBreakdown(household, now) {
+    console.log("now: " + now);
 	var dayBreakdown = [];
 	for (var i = 0; i < 7; i++) {
 		dayBreakdown.push([]);
@@ -86,14 +87,16 @@ function getWeekUsageBreakdown(household, now) {
 			dayBreakdown[i].push({'name':member.name, 'usage':0});
 		}
 		if (m.appliances !== undefined) {
+            console.log("member: " + member.id);
 			m.appliances.forEach(function(a) {
 				var appliance = db.getAppliance(a);
+                console.log("appliance name: " + appliance.name);
 				for (var i = 0; i < appliance.usage.length; i++) {
 					var startDate = new Date(appliance.usage[i].start);
 					var endDate = appliance.usage[i].end == null ? null : new Date(appliance.usage[i].end);
 					// if it started before the week, set start date to the start of the week
 					if (startDate.getMonth() != now.getMonth() || startDate.getDate() < now.getDate() - 6) {
-						startDate = new Date(now.getYear(), now.getMonth(), now.getDate() - 6);
+						startDate = new Date(1900 + now.getYear(), now.getMonth(), now.getDate() - 6);
 						// if end date was before the start of the week, ignore this usage
 						if (endDate != null && endDate.getMonth() != now.getMonth() || endDate.getDate() < now.getDate() - 6) {
 							continue;
@@ -101,7 +104,8 @@ function getWeekUsageBreakdown(household, now) {
 					}
 					for (var j = 6 - (now.getDate() - startDate.getDate()); j < 7; j++) {
 						var hitEnd = false;
-						var iendDate = new Date(now.getYear(), now.getMonth(), startDate.getDate(), 23, 59, 59, 999);
+						var iendDate = new Date(1900 + now.getYear(), now.getMonth(), startDate.getDate(), 23, 59, 59, 999);
+                        console.log("iendDate: " + iendDate);
 						if (endDate != null && endDate.getTime() < iendDate.getTime()) {
 							iendDate = endDate;
 							hitEnd = true;
@@ -110,6 +114,7 @@ function getWeekUsageBreakdown(household, now) {
 						}
 						for (var k = 0; k < dayBreakdown[j].length; k++) {
 							if (dayBreakdown[j][k].name == member.name) {
+                                console.log("adding " + millisToHours(iendDate - startDate) * appliance.rate + " kW/h to " + member.name);
 								dayBreakdown[j][k].usage += millisToHours(iendDate - startDate) * appliance.rate;
 								break;
 							}
@@ -117,7 +122,7 @@ function getWeekUsageBreakdown(household, now) {
 						if (hitEnd) {
 							break;
 						}
-						startDate = new Date(startDate.getYear(), startDate.getMonth(), startDate.getDate() + 1);
+						startDate = new Date(1900 + startDate.getYear(), startDate.getMonth(), startDate.getDate() + 1);
 					}
 				}
 			});
@@ -205,17 +210,19 @@ exports.viewUser = function(req, res) {
 
 exports.getHouseholdStats = function(req, res) {
     var household = db.getHousehold(req.params.household);
+    var now = new Date(Date.now());
     res.json({
         'householdBreakdown':getTotalUsageThisMonth(household),
-        'weekBreakdown':getWeekUsageBreakdown(household, new Date(Date.now()))
+        'weekBreakdown':getWeekUsageBreakdown(household, now)
     });
 }
 
 exports.getMemberStats = function(req, res) {
     var household = db.getHousehold(req.params.household);
     var memberId = req.params.member;
+    var now = new Date(Date.now());
     res.json({
         'userUsageData':getUserUsageData(household, memberId),
-        'weekBreakdown':getWeekUsageBreakdown(household, new Date(Date.now()))
+        'weekBreakdown':getWeekUsageBreakdown(household, now)
     });
 }
